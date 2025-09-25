@@ -13,7 +13,7 @@ jobs:
   build-project:
     name: Build project
     runs-on: ubuntu-latest
-    if: ${{!github.event.repository.is_template}} && hashFiles('.github/config/platform-matrix.json') != ''
+    if: hashFiles('.github/config/platform-matrix.json') != ''
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
@@ -23,6 +23,7 @@ jobs:
           fetch-depth: 0
       - name: List LFS files
         run: |
+          echo ${{hashFiles('.github/config/platform-matrix.json')}}
           git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
       - name: Restore cache for LFS
         uses: actions/cache@v3
