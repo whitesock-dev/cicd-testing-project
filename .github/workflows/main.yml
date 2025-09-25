@@ -54,7 +54,7 @@ jobs:
         with:
           targetPlatform: WebGL
           projectPath: ./TestingProject_Unity
-          buildProfile: 'Assets/Settings/BuildProfiles/WebglBuild.asset'
+          buildProfile: 'Assets/Settings/BuildProfiles/WindowsBuild.asset'
       - name: Upload build
         uses: actions/upload-artifact@v4
         with:
