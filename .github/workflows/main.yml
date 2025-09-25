@@ -21,8 +21,8 @@ jobs:
       - id: get_matrix
         if:  ${{ steps.get_state.outputs.state != '' }} 
         run: |
-          cat .github/config/platform-matrix.json
-          echo "matrix=${{ cat .github/config/platform-matrix.json }}" >> $GITHUB_OUTPUT
+          echo "$(cat .github/config/platform-matrix.json)"
+          echo "matrix=$(cat .github/config/platform-matrix.json)" >> $GITHUB_OUTPUT
     outputs:
       state: ${{ steps.get_state.outputs.state }}
       matrix: ${{ steps.get_matrix.outputs.matrix }}
