@@ -53,6 +53,7 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           targetPlatform: WebGL
+          projectPath: ./TestingProject_Unity
       - name: Upload build
         uses: actions/upload-artifact@v4
         with:
