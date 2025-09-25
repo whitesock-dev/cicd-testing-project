@@ -13,8 +13,7 @@ jobs:
   build-project:
     name: Build project
     runs-on: ubuntu-latest
-    if: >-
-      ${{!github.event.repository.is_templat && hashFiles('.github/config/platform-matrix.json') != ''}}
+    if: ${{!github.event.repository.is_templat && hashFiles('.github/config/platform-matrix.json') != ''}}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
