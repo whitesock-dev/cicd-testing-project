@@ -23,7 +23,7 @@ jobs:
         run: |
           jsonFile="$(cat .github/config/platform-matrix.json)"
           echo $jsonFile
-          echo "matrix=${{ fromJSON('$(cat .github/config/platform-matrix.json)') }}" >> $GITHUB_OUTPUT
+          echo "matrix=${{ fromJSON('.github/config/platform-matrix.json') }}" >> $GITHUB_OUTPUT
     outputs:
       state: ${{ steps.get_state.outputs.state }}
       matrix: ${{ steps.get_matrix.outputs.matrix }}
