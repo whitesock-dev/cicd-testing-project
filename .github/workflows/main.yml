@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       ${{ !github.event.repository.is_template
-          && needs.matrix_file_exist.outputs.state == '' }}
+          && needs.matrix_file_exist.outputs.state != '' }}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
