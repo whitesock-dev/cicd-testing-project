@@ -40,7 +40,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./TestingProject_Unity/Library
-          key: Library-TestingProject-WebGL
+          key: Library-TestingProject-StandaloneWindows64
           restore-keys: |
             Library-TestingProject-
             Library-
@@ -52,7 +52,8 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          targetPlatform: WebGL
+          # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
+          targetPlatform: StandaloneWindows64
           projectPath: ./TestingProject_Unity
           buildProfile: 'Assets/Settings/BuildProfiles/WindowsBuild.asset'
       - name: Upload build
