@@ -1,5 +1,5 @@
 {
-    "platforms":  [
+    "include":  [
         {
             "name":"android",
             "targetPlatform": "Android",
@@ -14,6 +14,6 @@
             "name":"webgl",
             "targetPlatform": "WebGL",
             "config":"Assets/Settings/BuildProfiles/WebglBuild.asset"
-        },
+        }
     ]
 }
