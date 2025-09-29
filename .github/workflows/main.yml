@@ -23,8 +23,8 @@ jobs:
         name: Get file
         if:  ${{ steps.get_state.outputs.state != '' }} 
         run: |
-          jsonFile="$(cat .github/config/platform-matrix.json)"
-          formatJson=$(echo "$jsonFile" | sed "s/\"/\\"")
+          jsonFile='$(cat .github/config/platform-matrix.json)'
+          formatJson=$(echo '$jsonFile' | sed "s/\"/\\"")
           echo $formatJson
           echo "file=$formatJson" >> $GITHUB_OUTPUT
       - id: get_matrix
