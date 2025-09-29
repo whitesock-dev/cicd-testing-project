@@ -1,8 +1,15 @@
-name: Webgl sub pipeline
+name: Android sub pipeline
 inputs:
-  platform:
-    required: false
+  targetPlatform:
+    required: true
     description: "Input platform"
+  platform:
+    required: true
+    description: "Input platform"
+  configFile:
+    required: true
+    description: "Input platform"
+  
 
 # outputs:
 #   random:

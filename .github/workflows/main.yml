@@ -49,9 +49,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: ${{ matrix.platformName }}'s external file
-        uses: .github/script/${{ matrix.workflowFile }}
+        uses: .github/script/build.yml
         with:
-          platform: ${{ matrix.targetPlatform }}
+          platform: ${{ matrix.platformName }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          configFile: ${{ matrix.configFile }}
       - name: List LFS files
         run: |
           echo ${{ matrix.platformName }}
