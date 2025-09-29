@@ -32,8 +32,8 @@ jobs:
         name: Get matrix
         if:  ${{ steps.get_file.outputs.file != '' }}
         run: |
-          matrix=${{ fromJSON(steps.get_file.outputs.file) }}
-          for each in "${matrix.platforms[@]}"
+          matrix=${{ fromJSON(steps.get_file.outputs.file).platforms }}
+          for each in "${matrix[@]}"
           do
             echo "$each"
           done
