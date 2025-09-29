@@ -24,9 +24,9 @@ jobs:
         if:  ${{ steps.get_state.outputs.state != '' }} 
         run: |
           jsonFile="$(cat .github/config/platform-matrix.json)"
-          jsonFile=$(echo "$jsonFile" | sed "s/\"/\\"")
-          echo $jsonFile
-          echo "file=$jsonFile" >> $GITHUB_OUTPUT
+          formatJson=$(echo "$jsonFile" | sed "s/\"/\\"")
+          echo $formatJson
+          echo "file=$formatJson" >> $GITHUB_OUTPUT
       - id: get_matrix
         if:  ${{ steps.get_state.outputs.state != '' }}
         run: |
