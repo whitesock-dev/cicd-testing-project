@@ -18,14 +18,19 @@ jobs:
       - id: get_state
         run: |
           echo "state=${{ hashFiles('.github/config/platform-matrix.json') }}" >> $GITHUB_OUTPUT
-      - id: get_matrix
+      - id: get_file
         if:  ${{ steps.get_state.outputs.state != '' }} 
         run: |
           jsonFile="$(cat .github/config/platform-matrix.json)"
           echo $jsonFile
-          echo "matrix=${{ fromJSON('.github/config/platform-matrix.json') }}" >> $GITHUB_OUTPUT
+          echo "file=$jsonFile" >> $GITHUB_OUTPUT 
+      - id: get_matrix
+        if:  ${{ steps.get_state.outputs.state != '' }} 
+        run: |
+          echo "matrix=${{ fromJSON(steps.get_file.outputs.file) }}" >> $GITHUB_OUTPUT 
     outputs:
       state: ${{ steps.get_state.outputs.state }}
+      jsonFile: ${{ steps.get_file.outputs.file }}
       matrix: ${{ steps.get_matrix.outputs.matrix }}
 
   build-project:
