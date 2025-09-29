@@ -9,7 +9,7 @@ inputs:
   configFile:
     required: true
     description: "Config file"
-  
+
 
 # outputs:
 #   random:
