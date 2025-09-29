@@ -2,13 +2,13 @@ name: Android sub pipeline
 inputs:
   targetPlatform:
     required: true
-    description: "Input platform"
+    description: "Target platform"
   platform:
     required: true
-    description: "Input platform"
+    description: "Current platform"
   configFile:
     required: true
-    description: "Input platform"
+    description: "Config file"
   
 
 # outputs:

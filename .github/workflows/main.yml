@@ -49,7 +49,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: ${{ matrix.platformName }}'s external file
-        uses: ./.github/script/build.yml
+        id: local-action
+        uses: ./.github/workflows/local-action/build.yml
         with:
           platform: ${{ matrix.platformName }}
           targetPlatform: ${{ matrix.targetPlatform }}
