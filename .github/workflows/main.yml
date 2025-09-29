@@ -51,7 +51,7 @@ jobs:
           fetch-depth: 0
       - name: List LFS files
         run: |
-          echo ${{needs.matrix_file_exist.outputs.matrix}}
+          echo ${{needs.matrix_file_exist.outputs.file}}
           git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
       - name: Restore cache for LFS
         uses: actions/cache@v3
