@@ -28,17 +28,9 @@ jobs:
           jsonFile=$(echo $jsonFile|tr -d '\n')
           echo "$jsonFile"
           echo "file=$jsonFile" >> $GITHUB_OUTPUT
-      - id: get_matrix
-        name: Get matrix
-        if:  ${{ steps.get_state.outputs.state != '' }}
-        run: |
-          echo ${{ fromJSON(steps.get_file.outputs.file).state }}
-          echo ${{ fromJSON(steps.get_file.outputs.file).value }}
-          echo ${{ fromJSON(steps.get_file.outputs.file).title }}
     outputs:
       state: ${{ steps.get_state.outputs.state }}
       file: ${{ steps.get_file.outputs.file }}
-      matrix: ${{ steps.get_matrix.outputs.matrix }}
 
   build-project:
     name: Build project
@@ -46,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       ${{ !github.event.repository.is_template
-          && needs.matrix_file_exist.outputs.state != '' && false}}
+          && needs.matrix_file_exist.outputs.state != ''}}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
