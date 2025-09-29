@@ -25,14 +25,16 @@ jobs:
         run: |
           jsonFile="$(cat .github/config/platform-matrix.json)"
           echo "$jsonFile"
-          formatJson=$(echo $jsonFile|tr -d '\n')
-          echo "$formatJson"
-          echo "file=$formatJson" >> $GITHUB_OUTPUT
+          jsonFile=$(echo $jsonFile|tr -d '\n')
+          echo "$jsonFile"
+          echo "file=$jsonFile" >> $GITHUB_OUTPUT
       - id: get_matrix
         name: Get matrix
         if:  ${{ steps.get_state.outputs.state != '' }}
         run: |
-          echo ${{ steps.get_file.outputs.file }}
+          echo ${{ steps.get_file.outputs.file.state }}
+          echo ${{ steps.get_file.outputs.file.value }}
+          echo ${{ steps.get_file.outputs.file.title }}
     outputs:
       state: ${{ steps.get_state.outputs.state }}
       file: ${{ steps.get_file.outputs.file }}
