@@ -19,6 +19,8 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check out code
+      uses: actions/checkout@v3
     - name: Echo stuff
       run: |
         echo swag ${{ inputs.name }}
