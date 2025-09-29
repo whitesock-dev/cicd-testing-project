@@ -23,5 +23,7 @@ runs:
       uses: actions/checkout@v3
     - name: Echo stuff
       run: |
-        echo swag ${{ inputs.name }}
+        echo ${{ inputs.targetPlatform }}
+        echo ${{ inputs.platform }}
+        echo ${{ inputs.configFile }}
       shell: bash
