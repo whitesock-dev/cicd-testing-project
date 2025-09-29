@@ -26,10 +26,8 @@ jobs:
           echo "file=$jsonFile" >> $GITHUB_OUTPUT 
       - id: get_matrix
         if:  ${{ steps.get_state.outputs.state != '' }}
-        needs: get_file
         run: |
           echo ${{steps.get_file.outputs.file}}
-          echo ${{needs.get_file.outputs.file}}
           echo "matrix=${{ fromJSON(steps.get_file.outputs.file) }}" >> $GITHUB_OUTPUT 
     outputs:
       state: ${{ steps.get_state.outputs.state }}
