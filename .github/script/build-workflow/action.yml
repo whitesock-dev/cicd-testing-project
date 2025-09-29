@@ -77,7 +77,7 @@ runs:
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
-        name: Build
-        path: build
+        name: Build-${{ inputs.platform }}
+        path: build-${{ inputs.platform }}
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}    
