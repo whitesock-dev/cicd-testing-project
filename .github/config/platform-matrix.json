@@ -4,19 +4,19 @@
             "platformName":"Android",
             "targetPlatform": "Android",
             "configFile":"Assets/Settings/BuildProfiles/AndroidBuild.asset",
-            "workflowFile": ".github/script/buildAndroid.yml"
+            "workflowFile": "buildAndroid.yml"
         },
         {
             "platformName":"Windows",
             "targetPlatform": "StandaloneWindows64",
             "configFile":"Assets/Settings/BuildProfiles/WindowsBuild.asset",
-            "workflowFile": ".github/script/buildWindows.yml"
+            "workflowFile": "buildWindows.yml"
         },
         {
             "platformName":"Webgl",
             "targetPlatform": "WebGL",
             "configFile":"Assets/Settings/BuildProfiles/WebglBuild.asset",
-            "workflowFile": ".github/script/buildWebgl.yml"
+            "workflowFile": "buildWebgl.yml"
         }
     ]
 }

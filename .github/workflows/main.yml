@@ -49,7 +49,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: ${{ matrix.platformName }}'s external file
-        uses: ${{ matrix.workflowFile }}
+        uses: .github/script/${{ matrix.workflowFile }}
         with:
           platform: ${{ matrix.targetPlatform }}
       - name: List LFS files
