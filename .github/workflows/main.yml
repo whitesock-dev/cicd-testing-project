@@ -29,7 +29,7 @@ jobs:
         name: Get matrix
         if:  ${{ steps.get_state.outputs.state != '' }}
         run: |
-          echo $steps.get_file.outputs.file 
+          echo ${{ steps.get_file.outputs.file }}
     outputs:
       state: ${{ steps.get_state.outputs.state }}
       file: ${{ steps.get_file.outputs.file }}
