@@ -34,7 +34,7 @@ jobs:
         run: |
           matrix=${{ fromJSON(steps.get_file.outputs.file) }}
           echo "$matrix"
-          echo "matrix="$matrix" >> $GITHUB_OUTPUT
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
     outputs:
       state: ${{ steps.get_state.outputs.state }}
       file: ${{ steps.get_file.outputs.file }}
