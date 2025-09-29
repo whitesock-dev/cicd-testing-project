@@ -1,0 +1,18 @@
+name: Webgl sub pipeline
+inputs:
+  platform:
+    required: false
+    description: "Input platform"
+
+# outputs:
+#   random:
+#     description: "Example output"
+#     value: ${{ steps.step1.outputs.random }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Echo stuff
+      run: |
+        echo swag ${{ inputs.name }}
+      shell: bash

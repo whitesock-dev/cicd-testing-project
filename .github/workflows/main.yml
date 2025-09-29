@@ -48,6 +48,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: ${{ matrix.platformName }}'s external file
+        uses: ${{ matrix.workflowFile }}
+        with:
+          platform: ${{ matrix.targetPlatform }}
       - name: List LFS files
         run: |
           echo ${{ matrix.platformName }}
