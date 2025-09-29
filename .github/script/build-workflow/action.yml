@@ -31,17 +31,20 @@ runs:
       run: |
         echo ${{ matrix.platformName }}
         git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      shell: bash
     - name: Restore cache for LFS
       uses: actions/cache@v3
       id: cache-lfs
       with:
         path: .git/lfs
         key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }} 
+      shell: bash  
     - name: Pull LFS
       run: |
           git lfs pull
           git add .
           git reset --hard
+      shell: bash
     - name: Cache build
       uses: actions/cache@v3
       with:
@@ -50,6 +53,7 @@ runs:
         restore-keys: |
           Library-TestingProject-${{ inputs.targetPlatform }}
           Library-${{ inputs.targetPlatform }}
+      shell: bash
     - name: Builder
       id: build-step
       uses: game-ci/unity-builder@v4
@@ -62,6 +66,7 @@ runs:
         targetPlatform: ${{ inputs.targetPlatform }}
         projectPath: ./TestingProject_Unity
         buildProfile: ${{ inputs.configFile }}
+      shell: bash
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
@@ -69,4 +74,5 @@ runs:
         path: build
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
     
