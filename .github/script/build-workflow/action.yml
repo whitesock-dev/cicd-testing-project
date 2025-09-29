@@ -74,10 +74,11 @@ runs:
         targetPlatform: ${{ inputs.targetPlatform }}
         projectPath: ./TestingProject_Unity
         buildProfile: ${{ inputs.configFile }}
+        buildsPath: build-${{ inputs.platform }}
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
-        name: Build-${{ inputs.platform }}
+        name: build-${{ inputs.platform }}
         path: build-${{ inputs.platform }}
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}    
