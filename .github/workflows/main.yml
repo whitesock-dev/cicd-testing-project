@@ -33,7 +33,6 @@ jobs:
       file: ${{ steps.get_file.outputs.file }}
 
   build-project:
-    name: Build project
     needs: matrix_file_exist
     runs-on: ubuntu-latest
     if: >-
@@ -43,6 +42,7 @@ jobs:
       matrix: ${{ fromJSON(needs.matrix_file_exist.outputs.file) }}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
+    name: Build project for  ${{ matrix.platformName }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -50,7 +50,7 @@ jobs:
           fetch-depth: 0
       - name: List LFS files
         run: |
-          echo ${{ matrix.platform.name }}
+          echo ${{ matrix.platformName }}
           git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
       - name: Restore cache for LFS
         uses: actions/cache@v3

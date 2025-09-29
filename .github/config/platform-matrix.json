@@ -1,19 +1,19 @@
 {
     "include":  [
         {
-            "name":"android",
+            "platformName":"Android",
             "targetPlatform": "Android",
-            "config":"Assets/Settings/BuildProfiles/AndroidBuild.asset"
+            "configFile":"Assets/Settings/BuildProfiles/AndroidBuild.asset"
         },
         {
-            "name":"windows",
+            "platformName":"Windows",
             "targetPlatform": "StandaloneWindows64",
-            "config":"Assets/Settings/BuildProfiles/WindowsBuild.asset"
+            "configFile":"Assets/Settings/BuildProfiles/WindowsBuild.asset"
         },
         {
-            "name":"webgl",
+            "platformName":"Webgl",
             "targetPlatform": "WebGL",
-            "config":"Assets/Settings/BuildProfiles/WebglBuild.asset"
+            "configFile":"Assets/Settings/BuildProfiles/WebglBuild.asset"
         }
     ]
 }
