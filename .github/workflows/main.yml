@@ -27,7 +27,9 @@ jobs:
       - id: get_matrix
         if:  ${{ steps.get_state.outputs.state != '' }} 
         run: |
-          echo ${{ fromJSON(steps.get_file.outputs.file) }}
+          echo ${{ fromJSON(steps.get_file.outputs.file)["state"] }}
+          echo ${{ fromJSON(steps.get_file.outputs.file)["value"] }}
+          echo ${{ fromJSON(steps.get_file.outputs.file)["title"] }}
           echo "matrix=${{ fromJSON(steps.get_file.outputs.file) }}" >> $GITHUB_OUTPUT 
     outputs:
       state: ${{ steps.get_state.outputs.state }}
