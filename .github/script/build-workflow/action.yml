@@ -11,13 +11,16 @@ inputs:
     description: "Config file"
   UNITY_EMAIL:
     required: true
-    description: "Config file"
+    description: "Unity Mail"
   UNITY_PASSWORD:
     required: true
-    description: "Config file"
+    description: "Unity Password"
   UNITY_LICENSE:
     required: true
-    description: "Config file"
+    description: "Unity License"
+  GITHUB_TOKEN:
+    required: true
+    description: "Github Token"
   
 
 
@@ -81,4 +84,4 @@ runs:
         name: build-${{ inputs.platform }}
         path: build-${{ inputs.platform }}
       env:
-        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}    
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
