@@ -1,5 +1,18 @@
 {
-    "state": true,
-    "value": 1,
-    "title": "lorem ipsum"
+    "platforms": ["android", "windows", "webgl"],
+    "android":
+    {
+        "name": "android-platform",
+        "config": "config-file-android"
+    },
+    "windows":
+    {
+        "name": "windows-platform",
+        "config": "config-file-windows"
+    }, 
+    "webgl":
+    {
+        "name": "webgl-platform",
+        "config": "config-file-webgl"
+    }
 }

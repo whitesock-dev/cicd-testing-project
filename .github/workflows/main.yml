@@ -47,6 +47,9 @@ jobs:
     if: >-
       ${{ !github.event.repository.is_template
           && needs.matrix_file_exist.outputs.state != ''}}
+    strategy:
+      matrix:
+        platform: ${{ needs.matrix_file_exist.outputs.matrix.platforms }}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
@@ -56,7 +59,7 @@ jobs:
           fetch-depth: 0
       - name: List LFS files
         run: |
-          echo ${{needs.matrix_file_exist.outputs.matrix}}
+          echo ${{ matrix.platform }}
           git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
       - name: Restore cache for LFS
         uses: actions/cache@v3
