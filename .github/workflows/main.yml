@@ -33,7 +33,7 @@ jobs:
         if:  ${{ steps.get_file.outputs.file != '' }}
         run: |
           matrix=${{ fromJSON(steps.get_file.outputs.file) }}
-          for each in "${matrix[@]}"
+          for each in "${matrix.platforms[@]}"
           do
             echo "$each"
           done
