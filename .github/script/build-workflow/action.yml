@@ -9,6 +9,16 @@ inputs:
   configFile:
     required: true
     description: "Config file"
+  UNITY_EMAIL:
+    required: true
+    description: "Config file"
+  UNITY_PASSWORD:
+    required: true
+    description: "Config file"
+  UNITY_LICENSE:
+    required: true
+    description: "Config file"
+  
 
 
 # outputs:
@@ -38,7 +48,6 @@ runs:
       with:
         path: .git/lfs
         key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }} 
-      shell: bash  
     - name: Pull LFS
       run: |
           git lfs pull
@@ -53,26 +62,22 @@ runs:
         restore-keys: |
           Library-TestingProject-${{ inputs.targetPlatform }}
           Library-${{ inputs.targetPlatform }}
-      shell: bash
     - name: Builder
       id: build-step
       uses: game-ci/unity-builder@v4
       env:
-        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        UNITY_EMAIL: ${{ inputs.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ inputs.UNITY_PASSWORD }}
+        UNITY_LICENSE: ${{ inputs.UNITY_LICENSE }}
       with:
         # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
         targetPlatform: ${{ inputs.targetPlatform }}
         projectPath: ./TestingProject_Unity
         buildProfile: ${{ inputs.configFile }}
-      shell: bash
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
         name: Build
         path: build
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      shell: bash
-    
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}    
