@@ -32,7 +32,9 @@ jobs:
         name: Get matrix
         if:  ${{ steps.get_file.outputs.file != '' }}
         run: |
-          echo "matrix=${{ fromJSON(steps.get_file.outputs.file) }}" >> $GITHUB_OUTPUT
+          matrix=${{ fromJSON(steps.get_file.outputs.file) }}
+          echo "$matrix"
+          echo "matrix="$matrix" >> $GITHUB_OUTPUT
     outputs:
       state: ${{ steps.get_state.outputs.state }}
       file: ${{ steps.get_file.outputs.file }}
