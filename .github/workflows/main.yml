@@ -23,9 +23,9 @@ jobs:
         name: Get file
         if:  ${{ steps.get_state.outputs.state != '' }} 
         run: |
-          jsonFile='$(cat .github/config/platform-matrix.json)'
-          echo '$jsonFile'
-          echo 'file=$jsonFile' >> $GITHUB_OUTPUT
+          jsonFile="$(cat .github/config/platform-matrix.json)"
+          echo "$jsonFile"
+          echo "file=$jsonFile" >> $GITHUB_OUTPUT
       - id: get_matrix
         name: Get matrix
         if:  ${{ steps.get_state.outputs.state != '' }}
