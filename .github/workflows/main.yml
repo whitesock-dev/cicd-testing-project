@@ -28,20 +28,9 @@ jobs:
           jsonFile=$(echo $jsonFile|tr -d '\n')
           echo "$jsonFile"
           echo "file=$jsonFile" >> $GITHUB_OUTPUT
-      - id: get_matrix
-        name: Get matrix
-        if:  ${{ steps.get_file.outputs.file != '' }}
-        run: |
-          matrix=${{ fromJSON(steps.get_file.outputs.file).platforms }}
-          for each in "${matrix[@]}"
-          do
-            echo "$each"
-          done
-          echo "matrix=$matrix" >> $GITHUB_OUTPUT
     outputs:
       state: ${{ steps.get_state.outputs.state }}
       file: ${{ steps.get_file.outputs.file }}
-      matrix: ${{ steps.get_matrix.outputs.matrix }}
 
   build-project:
     name: Build project
@@ -52,7 +41,7 @@ jobs:
           && needs.matrix_file_exist.outputs.state != ''}}
     strategy:
       matrix:
-        platform: ${{ fromJSON(needs.matrix_file_exist.outputs.file).platforms }}
+        platform: ${{ fromJSON(needs.matrix_file_exist.outputs.file) }}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
@@ -62,7 +51,7 @@ jobs:
           fetch-depth: 0
       - name: List LFS files
         run: |
-          echo ${{ matrix.platform }}
+          echo ${{ matrix.platform.name }}
           git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
       - name: Restore cache for LFS
         uses: actions/cache@v3

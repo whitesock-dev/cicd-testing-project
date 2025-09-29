@@ -1,18 +1,19 @@
 {
-    "platforms": ["android", "windows", "webgl"],
-    "android":
-    {
-        "name": "android-platform",
-        "config": "config-file-android"
-    },
-    "windows":
-    {
-        "name": "windows-platform",
-        "config": "config-file-windows"
-    }, 
-    "webgl":
-    {
-        "name": "webgl-platform",
-        "config": "config-file-webgl"
-    }
+    "platforms":  [
+        {
+            "name":"android",
+            "targetPlatform": "Android",
+            "config":"Assets/Settings/BuildProfiles/AndroidBuild.asset"
+        },
+        {
+            "name":"windows",
+            "targetPlatform": "StandaloneWindows64",
+            "config":"Assets/Settings/BuildProfiles/WindowsBuild.asset"
+        },
+        {
+            "name":"webgl",
+            "targetPlatform": "WebGL",
+            "config":"Assets/Settings/BuildProfiles/WebglBuild.asset"
+        },
+    ]
 }
