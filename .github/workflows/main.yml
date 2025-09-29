@@ -27,7 +27,7 @@ jobs:
           echo "$jsonFile"
           jsonFile=$(echo $jsonFile|tr -d '\n')
           echo "$jsonFile"
-          echo "file=${{ fromJSON(jsonFile) }}" >> $GITHUB_OUTPUT
+          echo "file=$jsonFile" >> $GITHUB_OUTPUT
       - id: get_matrix
         name: Get matrix
         if:  ${{ steps.get_file.outputs.file != '' }}
