@@ -25,6 +25,7 @@ jobs:
         run: |
           jsonFile="$(cat .github/config/platform-matrix.json)"
           echo "$jsonFile"
+          formatJson="$( sed 's/\\n//g' <<<"$jsonFile" )"
           echo "file=$jsonFile" >> $GITHUB_OUTPUT
       - id: get_matrix
         name: Get matrix
