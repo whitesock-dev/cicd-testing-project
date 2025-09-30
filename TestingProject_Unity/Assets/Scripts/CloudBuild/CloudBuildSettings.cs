@@ -7,6 +7,8 @@ namespace Whitesock
     using Unity.VisualScripting;
     using UnityEngine;
     using UnityEditor;
+    using UnityEditor.Build.Profile;
+    using UnityEditor.VersionControl;
 
     class CloudBuildSettings : EditorWindow
     {
@@ -64,16 +66,30 @@ namespace Whitesock
         {            
             if(settings == null)
                 LoadJSONSettings();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Settings:", GUILayout.ExpandWidth(false));
+            if (GUILayout.Button("+", GUILayout.ExpandWidth(false)))
+                settings.Add(new PlatformSettings(), true);
+            EditorGUILayout.EndHorizontal();
             
-            GUILayout.Label("Settings:");
             for (int i = 0; i < settings.Platforms.Count; i++)
             {
-                settings.PlatformsVisiblity[i] = EditorGUILayout.BeginFoldoutHeaderGroup(settings.PlatformsVisiblity[i], settings.Platforms[i].platformName);
+                var leftStyle = EditorStyles.foldout;
+                leftStyle.alignment = TextAnchor.MiddleLeft;
+                leftStyle.stretchWidth = false;
+                EditorGUILayout.BeginHorizontal();
+                settings.PlatformsVisiblity[i] = EditorGUILayout.BeginFoldoutHeaderGroup(settings.PlatformsVisiblity[i], settings.Platforms[i].platformName, leftStyle);
+                if (GUILayout.Button("-", GUILayout.ExpandWidth(false)))
+                    settings.Remove(settings.Platforms[i]);
+                EditorGUILayout.EndHorizontal();
                 if (settings.PlatformsVisiblity[i])
                 {
                     settings.Platforms[i].platformName = EditorGUILayout.TextField("Platform name:", settings.Platforms[i].platformName);
                     settings.Platforms[i].targetPlatform = EditorGUILayout.TextField("Target platform:", settings.Platforms[i].targetPlatform);
-                    settings.Platforms[i].configFile = EditorGUILayout.TextField("Config file:", settings.Platforms[i].configFile);
+                    settings.ConfigFiles[i] = EditorGUILayout.ObjectField("Build Profile:", settings.ConfigFiles[i], typeof(BuildProfile), false) as BuildProfile;
+                    settings.Platforms[i].configFile = AssetDatabase.GetAssetPath(settings.ConfigFiles[i]);
+                    EditorGUILayout.LabelField("Build Profile Asset Path:", settings.Platforms[i].configFile);
 
                 }
                 EditorGUI.EndFoldoutHeaderGroup();
@@ -88,6 +104,7 @@ namespace Whitesock
 
         static void LoadJSONSettings()
         {
+            //TODO: convert PlatformSettings.configFile asset path in build profile file
             string dataPath = Application.dataPath;
             string settingsPath = dataPath + "/../../.github/config/platform-matrix.json";
             if (File.Exists(settingsPath))
@@ -123,30 +140,44 @@ namespace Whitesock
     {
         public List<PlatformSettings> Platforms;
         public List<bool> PlatformsVisiblity;
+        public List<BuildProfile> ConfigFiles;
 
         public BuildSettingsEditor()
         {
             Platforms = new List<PlatformSettings>();
             PlatformsVisiblity = new List<bool>();
+            ConfigFiles =  new List<BuildProfile>();
         }
 
         public void Add(PlatformSettings platform, bool visibility = true)
         {
             Platforms.Add(platform);
             PlatformsVisiblity.Add(visibility);
+            ConfigFiles.Add(ScriptableObject.CreateInstance<BuildProfile>());
+        }
+
+        public void Remove(PlatformSettings platform)
+        {
+            int index =  Platforms.IndexOf(platform);
+            Platforms.Remove(platform);
+            PlatformsVisiblity.RemoveAt(index);
+            ConfigFiles.RemoveAt(index);
         }
 
         public void AddRange(PlatformSettings[] platforms, bool visibility = true)
         {
             Platforms.AddRange(platforms);
-            for(int i = 0; i < platforms.Length; i++)
+            for (int i = 0; i < platforms.Length; i++)
+            {
                 PlatformsVisiblity.Add(visibility);
+                ConfigFiles.Add(ScriptableObject.CreateInstance<BuildProfile>());
+            }
         }
-
         public void Clear()
         {
             Platforms?.Clear();
             PlatformsVisiblity?.Clear();
+            ConfigFiles?.Clear();
         }
     }
     [Serializable]
