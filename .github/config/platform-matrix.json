@@ -1,1 +1,1 @@
-{"include":[{"platformName":"WIndows","targetPlatform":"StandaloneWindows64","configFile":"Assets/Settings/BuildProfiles/WindowsBuild.asset"}]}
+{"include":[{"platformName":"Windows","targetPlatform":"StandaloneWindows64","configFile":"Assets/Settings/BuildProfiles/WindowsBuild.asset"}]}
