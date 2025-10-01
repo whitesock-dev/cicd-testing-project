@@ -168,9 +168,15 @@ namespace Whitesock
         {
             Platforms.AddRange(platforms);
             for (int i = 0; i < platforms.Length; i++)
-            {
+            {   
+                
+                var currentPlatform = platforms[i];
+                BuildProfile profile = ScriptableObject.CreateInstance<BuildProfile>();
+                var loadedFile = (BuildProfile)AssetDatabase.LoadAssetAtPath(currentPlatform.configFile, typeof(BuildProfile));
+                if(loadedFile != null)
+                    profile = loadedFile;
                 PlatformsVisiblity.Add(visibility);
-                ConfigFiles.Add(ScriptableObject.CreateInstance<BuildProfile>());
+                ConfigFiles.Add(profile);
             }
         }
         public void Clear()
