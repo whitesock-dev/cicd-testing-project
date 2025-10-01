@@ -16,7 +16,7 @@ namespace Whitesock
 
         private static CloudBuildSettings window;
         private static BuildSettingsEditor settings;
-        
+        private static string settingsPath = Application.dataPath + "/../../.github/config/platform-matrix.json";
         private string projectName;
         private string ProjectName
         {
@@ -122,9 +122,6 @@ namespace Whitesock
 
         static void LoadJSONSettings()
         {
-            //TODO: convert PlatformSettings.configFile asset path in build profile file
-            string dataPath = Application.dataPath;
-            string settingsPath = dataPath + "/../../.github/config/platform-matrix.json";
             if (File.Exists(settingsPath))
             {
                 settings ??= new BuildSettingsEditor();
