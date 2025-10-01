@@ -4,6 +4,7 @@ namespace Whitesock
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
+    using JetBrains.Annotations;
     using Unity.VisualScripting;
     using UnityEngine;
     using UnityEditor;
@@ -139,7 +140,32 @@ namespace Whitesock
         #region  SAVE
         void SaveSettings()
         {
-            window.Close();
+            if (settings.Platforms.Count == 0)
+            {
+                if(File.Exists(settingsPath))
+                    File.Delete(settingsPath);
+            }
+            else
+            {
+                List<PlatformSettings> platforms = new List<PlatformSettings>();
+                for (int i = 0; i < settings.Platforms.Count; i++)
+                {
+                    var temp = new PlatformSettings();
+                    temp.platformName = settings.Platforms[i].platformName;
+                    temp.targetPlatform = settings.Platforms[i].targetPlatform;
+                    temp.configFile = settings.Platforms[i].configFile;
+                    platforms.Add(temp);
+                }
+
+            
+                var jsonSettings = new BuildSetting();
+                jsonSettings.include = platforms.ToArray();
+            
+                File.WriteAllText(settingsPath, JsonUtility.ToJson(jsonSettings));
+            
+                Debug.Log(JsonUtility.ToJson(jsonSettings));
+            }
+            window?.Close();
         }
         #endregion SAVE
         #region UTILITY
