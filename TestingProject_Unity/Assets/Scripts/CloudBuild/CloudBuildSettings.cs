@@ -41,6 +41,7 @@ namespace Whitesock
         }
 
         private List<string> buildTargets = new List<string>();
+        private Vector2 scrollPos;
 
         List<string> BuildTargets
         {
@@ -52,6 +53,7 @@ namespace Whitesock
                 return buildTargets;
             }
         }
+
         #endregion FIELDS
 
         #region UTILITY METHODS
@@ -78,13 +80,13 @@ namespace Whitesock
         {            
             if(settings == null)
                 LoadJSONSettings();
-
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Settings:", GUILayout.ExpandWidth(false));
             if (GUILayout.Button("+", GUILayout.ExpandWidth(false)))
                 settings.Add(new PlatformSettings(), true);
             EditorGUILayout.EndHorizontal();
-            
+            HorizontalLine(Color.grey);
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false);
             for (int i = 0; i < settings.Platforms.Count; i++)
             {
                 var leftStyle = EditorStyles.foldout;
@@ -109,9 +111,10 @@ namespace Whitesock
                 }
                 EditorGUI.EndFoldoutHeaderGroup();
             }
-    
+            EditorGUILayout.EndScrollView();
             if (GUILayout.Button("Save Settings"))
                 SaveSettings();
+            
         }
         #endregion EDITOR VIEW METHODS
         
@@ -142,8 +145,23 @@ namespace Whitesock
             window.Close();
         }
         #endregion SAVE
+        #region UTILITY
+        static void HorizontalLine (Color color) {
+            GUIStyle horizontalLine;
+            horizontalLine = new GUIStyle();
+            horizontalLine.normal.background = EditorGUIUtility.whiteTexture;
+            horizontalLine.margin = new RectOffset( 0, 0, 4, 4 );
+            horizontalLine.fixedHeight = 1;
+            horizontalLine.fixedWidth = 150;
+            var c = GUI.color;
+            GUI.color = color;
+            GUILayout.Box( GUIContent.none, horizontalLine);
+            GUI.color = c;
+        }
+        #endregion
     }
 
+    #region DATAS
     [Serializable]
     class BuildSetting
     {
@@ -208,5 +226,5 @@ namespace Whitesock
         public string targetPlatform;
         public string configFile;
     }
-
+    #endregion DATAS
 }
