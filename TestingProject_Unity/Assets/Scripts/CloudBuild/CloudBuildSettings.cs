@@ -40,6 +40,18 @@ namespace Whitesock
             }
         }
 
+        private List<string> buildTargets = new List<string>();
+
+        List<string> BuildTargets
+        {
+            get
+            {
+                buildTargets ??= new List<string>();
+                if(buildTargets.Count == 0)
+                    buildTargets.AddRange(Enum.GetNames(typeof(BuildTarget)));
+                return buildTargets;
+            }
+        }
         #endregion FIELDS
 
         #region UTILITY METHODS
@@ -86,7 +98,10 @@ namespace Whitesock
                 if (settings.PlatformsVisiblity[i])
                 {
                     settings.Platforms[i].platformName = EditorGUILayout.TextField("Platform name:", settings.Platforms[i].platformName);
-                    settings.Platforms[i].targetPlatform = EditorGUILayout.TextField("Target platform:", settings.Platforms[i].targetPlatform);
+                    int index = BuildTargets.IndexOf(settings.Platforms[i].targetPlatform);
+                    index = index < 0 ? 0 : index;
+                    settings.Platforms[i].targetPlatform = BuildTargets[EditorGUILayout.Popup("Target platform:", index, BuildTargets.ToArray(),  EditorStyles.popup)]; 
+                    //EditorGUILayout.TextField("Target platform:", settings.Platforms[i].targetPlatform);
                     settings.ConfigFiles[i] = EditorGUILayout.ObjectField("Build Profile:", settings.ConfigFiles[i], typeof(BuildProfile), false) as BuildProfile;
                     settings.Platforms[i].configFile = AssetDatabase.GetAssetPath(settings.ConfigFiles[i]);
                     EditorGUILayout.LabelField("Build Profile Asset Path:", settings.Platforms[i].configFile);
