@@ -1,1 +1,1 @@
-{"include":[{"platformName":"Windows","targetPlatform":"StandaloneWindows64","configFile":"Assets/Settings/BuildProfiles/WindowsBuild.asset"},{"platformName":"Android","targetPlatform":"Android","configFile":"Assets/Settings/BuildProfiles/AndroidBuild.asset"}]}
+{"include":[{"platformName":"Android","targetPlatform":"Android","configFile":"Assets/Settings/BuildProfiles/AndroidBuild.asset"},{"platformName":"WebGL","targetPlatform":"WebGL","configFile":"Assets/Settings/BuildProfiles/WebglBuild.asset"}]}
