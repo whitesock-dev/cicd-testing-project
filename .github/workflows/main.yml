@@ -79,7 +79,6 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
-          targetPlatform: StandaloneWindows64
           projectPath: ./TestingProject_Unity
           buildProfile: 'Assets/Settings/BuildProfiles/WindowsBuild.asset'
       - name: Upload build
