@@ -38,53 +38,23 @@ jobs:
     if: >-
       ${{ !github.event.repository.is_template
           && needs.matrix_file_exist.outputs.state != ''}}
-  
+    strategy:
+      matrix: ${{ fromJSON(needs.matrix_file_exist.outputs.file) }}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
-    name: Build project
+    name: Build project for  ${{ matrix.platformName }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: List LFS files
-        run: |
-          echo ${{ matrix.platformName }}
-          git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
-      - name: Restore cache for LFS
-        uses: actions/cache@v3
-        id: cache-lfs
+      - name: ${{ matrix.platformName }}'s external file
+        uses: ./.github/script/build-workflow
         with:
-          path: .git/lfs
-          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }} 
-      - name: Pull LFS
-        run: |
-            git lfs pull
-            git add .
-            git reset --hard
-      - name: Cache build
-        uses: actions/cache@v3
-        with:
-          path: ./TestingProject_Unity/Library
-          key: Library-TestingProject-StandaloneWindows64
-          restore-keys: |
-            Library-TestingProject-
-            Library-
-      - name: Builder
-        id: build-step
-        uses: game-ci/unity-builder@v4
-        env:
+          platform: ${{ matrix.platformName }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          configFile: ${{ matrix.configFile }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
-          projectPath: ./TestingProject_Unity
-          buildProfile: 'Assets/Settings/BuildProfiles/WindowsBuild.asset'
-      - name: Upload build
-        uses: actions/upload-artifact@v4
-        with:
-          name: Build
-          path: build
-        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
