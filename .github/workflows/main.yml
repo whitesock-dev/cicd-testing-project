@@ -76,7 +76,7 @@ jobs:
       - name: Cache build
         uses: actions/cache@v3
         with:
-          path: TestingProject_Unity/Library
+          path: ./TestingProject_Unity/Library
           key: Library-TestingProject-${{ matrix.targetPlatform }}
           restore-keys: |
             Library-TestingProject-${{ matrix.targetPlatform }}
@@ -91,7 +91,7 @@ jobs:
         with:
           # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
           targetPlatform: ${{ matrix.targetPlatform }}
-          projectPath: TestingProject_Unity
+          projectPath: ./TestingProject_Unity
           buildProfile: ${{ matrix.configFile }}
           buildsPath: build-${{ matrix.platformName }}
       - name: Upload build
