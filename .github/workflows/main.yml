@@ -48,13 +48,56 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: ${{ matrix.platformName }}'s external file
-        uses: ./.github/build-workflow
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Echo stuff
+        run: |
+          echo ${{ matrix.targetPlatform }}
+          echo ${{ matrix.platformName }}
+          echo ${{ matrix.configFile }}
+        shell: bash
+      - name: List LFS files
+        run: |
+          echo ${{ matrix.platformName }}
+          git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+        shell: bash
+      - name: Restore cache for LFS
+        uses: actions/cache@v3
+        id: cache-lfs
         with:
-          platform: ${{ matrix.platformName }}
-          targetPlatform: ${{ matrix.targetPlatform }}
-          configFile: ${{ matrix.configFile }}
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }} 
+      - name: Pull LFS
+        run: |
+            git lfs pull
+            git add .
+            git reset --hard
+        shell: bash
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: TestingProject_Unity/Library
+          key: Library-TestingProject-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-TestingProject-${{ matrix.targetPlatform }}
+            Library-${{ matrix.targetPlatform }}
+      - name: Builder
+        id: build-step
+        uses: game-ci/unity-builder@v4
+        env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
+          targetPlatform: ${{ matrix.targetPlatform }}
+          projectPath: TestingProject_Unity
+          buildProfile: ${{ matrix.configFile }}
+          buildsPath: build-${{ matrix.platformName }}
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.platformName }}
+          path: build-${{ matrix.platformName }}
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

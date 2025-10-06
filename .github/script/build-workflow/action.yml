@@ -1,0 +1,87 @@
+name: Android sub pipeline
+inputs:
+  targetPlatform:
+    required: true
+    description: "Target platform"
+  platform:
+    required: true
+    description: "Current platform"
+  configFile:
+    required: true
+    description: "Config file"
+  UNITY_EMAIL:
+    required: true
+    description: "Unity Mail"
+  UNITY_PASSWORD:
+    required: true
+    description: "Unity Password"
+  UNITY_LICENSE:
+    required: true
+    description: "Unity License"
+  GITHUB_TOKEN:
+    required: true
+    description: "Github Token"
+  
+
+
+# outputs:
+#   random:
+#     description: "Example output"
+#     value: ${{ steps.step1.outputs.random }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+    - name: Echo stuff
+      run: |
+        echo ${{ inputs.targetPlatform }}
+        echo ${{ inputs.platform }}
+        echo ${{ inputs.configFile }}
+      shell: bash
+    - name: List LFS files
+      run: |
+        echo ${{ matrix.platformName }}
+        git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      shell: bash
+    - name: Restore cache for LFS
+      uses: actions/cache@v3
+      id: cache-lfs
+      with:
+        path: .git/lfs
+        key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }} 
+    - name: Pull LFS
+      run: |
+          git lfs pull
+          git add .
+          git reset --hard
+      shell: bash
+    - name: Cache build
+      uses: actions/cache@v3
+      with:
+        path: TestingProject_Unity/Library
+        key: Library-TestingProject-${{ inputs.targetPlatform }}
+        restore-keys: |
+          Library-TestingProject-${{ inputs.targetPlatform }}
+          Library-${{ inputs.targetPlatform }}
+    - name: Builder
+      id: build-step
+      uses: game-ci/unity-builder@v4
+      env:
+        UNITY_EMAIL: ${{ inputs.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ inputs.UNITY_PASSWORD }}
+        UNITY_LICENSE: ${{ inputs.UNITY_LICENSE }}
+      with:
+        # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
+        targetPlatform: ${{ inputs.targetPlatform }}
+        projectPath: TestingProject_Unity
+        buildProfile: ${{ inputs.configFile }}
+        buildsPath: build-${{ inputs.platform }}
+    - name: Upload build
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ inputs.platform }}
+        path: build-${{ inputs.platform }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
