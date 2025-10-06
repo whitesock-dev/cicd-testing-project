@@ -60,7 +60,7 @@ runs:
     - name: Cache build
       uses: actions/cache@v3
       with:
-        path: ./TestingProject_Unity/Library
+        path: TestingProject_Unity/Library
         key: Library-TestingProject-${{ inputs.targetPlatform }}
         restore-keys: |
           Library-TestingProject-${{ inputs.targetPlatform }}
@@ -75,7 +75,7 @@ runs:
       with:
         # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
         targetPlatform: ${{ inputs.targetPlatform }}
-        projectPath: ./TestingProject_Unity
+        projectPath: TestingProject_Unity
         buildProfile: ${{ inputs.configFile }}
         buildsPath: build-${{ inputs.platform }}
     - name: Upload build
