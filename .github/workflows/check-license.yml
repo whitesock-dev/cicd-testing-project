@@ -24,7 +24,9 @@ jobs:
           echo "${{ secrets.UNITY_PASSWORD }}"
       - name: Fail - No license
         if: ${{ ((!startsWith(env.UNITY_LICENSE, '<') || env.UNITY_LICENSE == '') && env.UNITY_SERIAL == '') || env.UNITY_EMAIL == '' || env.UNITY_PASSWORD == ''}}
-        run: exit 1
+        run: |
+          echo 'Some secrets infos are missing'
+          exit 1
       - id: license_state
         name: Success - License Exists
         run: |
