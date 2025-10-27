@@ -22,9 +22,13 @@ jobs:
           echo "${{ secrets.UNITY_SERIAL }}"
           echo "${{ secrets.UNITY_EMAIL }}"
           echo "${{ secrets.UNITY_PASSWORD }}"
+      - name: License doesnt exists
+        if: ${{ ((!startsWith(env.UNITY_LICENSE, '<') || env.UNITY_LICENSE == '') && env.UNITY_SERIAL == '') || env.UNITY_EMAIL == '' || env.UNITY_PASSWORD == ''}}
+        run: |
+          echo 'Some secrets infos are missing'
       - id: license_state
-        if: ${{ (startsWith(env.UNITY_LICENSE, '<') || env.UNITY_SERIAL != '') && env.UNITY_EMAIL != '' && env.UNITY_PASSWORD != ''}}
         name: Success - License Exists
+        if: ${{ (startsWith(env.UNITY_LICENSE, '<') || env.UNITY_SERIAL != '') && env.UNITY_EMAIL != '' && env.UNITY_PASSWORD != ''}}
         run: |
           echo "Exists license details"
           echo 'state=true' >> $GITHUB_OUTPUT
