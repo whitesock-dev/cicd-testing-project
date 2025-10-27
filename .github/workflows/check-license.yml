@@ -22,11 +22,13 @@ jobs:
           echo "${{ secrets.UNITY_SERIAL }}"
           echo "${{ secrets.UNITY_EMAIL }}"
           echo "${{ secrets.UNITY_PASSWORD }}"
-
       - name: Fail - No license
         if: ${{ ((!startsWith(env.UNITY_LICENSE, '<') || env.UNITY_LICENSE == '') && env.UNITY_SERIAL == '') || env.UNITY_EMAIL == '' || env.UNITY_PASSWORD == ''}}
         run: exit 1
-      - name: Success - License Exists
+      - id: license_state
+        name: Success - License Exists
         run: |
           echo "Exists license details"
           echo 'state=true' >> $GITHUB_OUTPUT
+    outputs:
+      state: ${{ steps.license_state.outputs.state }}
