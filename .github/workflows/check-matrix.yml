@@ -21,13 +21,9 @@ jobs:
         name: Get state
         run: |
           echo 'state=${{ hashFiles('.github/config/platform-matrix.json') }}' >> $GITHUB_OUTPUT
-      - name: Get file Fail
-        if:  ${{ steps.get_state.outputs.state == '' }} 
-        run: |
-          echo 'Matrix file doesnt exists'
-          exit 1
       - id: get_file
-        name: File exists
+        name: Get file
+        if:  ${{ steps.get_state.outputs.state != '' }} 
         run: |
           jsonFile="$(cat .github/config/platform-matrix.json)"
           echo "$jsonFile"

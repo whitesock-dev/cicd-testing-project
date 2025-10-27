@@ -22,12 +22,11 @@ jobs:
           echo "${{ secrets.UNITY_SERIAL }}"
           echo "${{ secrets.UNITY_EMAIL }}"
           echo "${{ secrets.UNITY_PASSWORD }}"
-      - name: Fail - No license
-        if: ${{ ((!startsWith(env.UNITY_LICENSE, '<') || env.UNITY_LICENSE == '') && env.UNITY_SERIAL == '') || env.UNITY_EMAIL == '' || env.UNITY_PASSWORD == ''}}
         run: |
           echo 'Some secrets infos are missing'
           exit 1
       - id: license_state
+        if: ${{ (startsWith(env.UNITY_LICENSE, '<') || env.UNITY_SERIAL != '') && env.UNITY_EMAIL != '' && env.UNITY_PASSWORD != ''}}
         name: Success - License Exists
         run: |
           echo "Exists license details"
