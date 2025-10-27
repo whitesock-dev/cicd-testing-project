@@ -1,6 +1,6 @@
 name: Build Repo
 on:
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: write
