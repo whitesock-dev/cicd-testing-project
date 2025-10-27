@@ -16,6 +16,7 @@ jobs:
   CheckMatrix:
     name: Check Matrix File
     needs: [CheckLicense]
+    if: needs.CheckLicense.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/check-matrix.yml
   BuildRepo:
