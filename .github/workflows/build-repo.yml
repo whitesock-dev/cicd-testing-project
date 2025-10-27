@@ -8,7 +8,6 @@ permissions:
 jobs:
 
   build-project:
-    needs: matrix_file_exist
     runs-on: ubuntu-latest
     if: >-
       ${{ !github.event.repository.is_template
