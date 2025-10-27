@@ -1,0 +1,25 @@
+name: Initialise Repo
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  CheckLicense:
+    name: Check Unity License
+    secrets: inherit
+    uses: ./.github/workflows/check-license.yml
+  CheckMatrix:
+    name: Check Matrix File
+    needs: [CheckLicense]
+    secrets: inherit
+    uses: ./.github/workflows/check-matrix.yml
+  BuildRepo:
+    name:  Build Repo
+    needs: [CheckLicense,CheckMatrix]
+    secrets: inherit
+    uses: ./.github/workflows/build-repo.yml

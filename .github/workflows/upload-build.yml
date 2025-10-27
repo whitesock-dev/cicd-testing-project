@@ -1,0 +1,57 @@
+name: Upload Build
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  matrix_file_exist:
+    name: Check matrix file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - id: get_state
+        name: Get state
+        run: |
+          echo 'state=${{ hashFiles('.github/config/platform-matrix.json') }}' >> $GITHUB_OUTPUT
+      - id: get_file
+        name: Get file
+        if:  ${{ steps.get_state.outputs.state != '' }} 
+        run: |
+          jsonFile="$(cat .github/config/platform-matrix.json)"
+          echo "$jsonFile"
+          jsonFile=$(echo $jsonFile|tr -d '\n')
+          echo "$jsonFile"
+          echo "file=$jsonFile" >> $GITHUB_OUTPUT
+    outputs:
+      state: ${{ steps.get_state.outputs.state }}
+      file: ${{ steps.get_file.outputs.file }}
+
+  build-project:
+    needs: matrix_file_exist
+    runs-on: ubuntu-latest
+    if: >-
+      ${{ !github.event.repository.is_template
+          && needs.matrix_file_exist.outputs.state != ''}}
+    strategy:
+      matrix: ${{ fromJSON(needs.matrix_file_exist.outputs.file) }}
+    outputs:
+      buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
+    name: Build project for  ${{ matrix.platformName }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: ${{ matrix.platformName }}'s external file
+        uses: ./.github/script/build-workflow
+        with:
+          platform: ${{ matrix.platformName }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          configFile: ${{ matrix.configFile }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
