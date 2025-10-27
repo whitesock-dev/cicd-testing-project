@@ -3,6 +3,7 @@ namespace Whitesock
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using JetBrains.Annotations;
     using Unity.VisualScripting;
@@ -107,6 +108,7 @@ namespace Whitesock
                     //EditorGUILayout.TextField("Target platform:", settings.Platforms[i].targetPlatform);
                     settings.ConfigFiles[i] = EditorGUILayout.ObjectField("Build Profile:", settings.ConfigFiles[i], typeof(BuildProfile), false) as BuildProfile;
                     settings.Platforms[i].configFile = AssetDatabase.GetAssetPath(settings.ConfigFiles[i]);
+                    CheckProfileSymbols(settings.Platforms[i].configFile);
                     EditorGUILayout.LabelField("Build Profile Asset Path:", settings.Platforms[i].configFile);
 
                 }
@@ -128,6 +130,10 @@ namespace Whitesock
                 settings ??= new BuildSettingsEditor();
                 settings.Clear();
                 settings.AddRange(JsonUtility.FromJson<BuildSetting>(File.ReadAllText(settingsPath)).include, false);
+                foreach (var platform in settings.Platforms)
+                {
+                    CheckProfileSymbols(platform.configFile);
+                }
             }
             else
             {
@@ -154,6 +160,7 @@ namespace Whitesock
                     temp.platformName = settings.Platforms[i].platformName;
                     temp.targetPlatform = settings.Platforms[i].targetPlatform;
                     temp.configFile = settings.Platforms[i].configFile;
+                    
                     platforms.Add(temp);
                 }
 
@@ -180,6 +187,22 @@ namespace Whitesock
             GUI.color = color;
             GUILayout.Box( GUIContent.none, horizontalLine);
             GUI.color = c;
+        }
+        
+        static void CheckProfileSymbols(string profilePath)
+        {
+            var loadedFile = (BuildProfile)AssetDatabase.LoadAssetAtPath(profilePath, typeof(BuildProfile));
+            if (loadedFile == null)
+                return;
+            
+            if (!loadedFile.scriptingDefines.Contains("BUILD_PROFILE_LOADED"))
+            {
+                List<string> currDefines = new List<string>();
+                currDefines.AddRange(loadedFile.scriptingDefines);
+                currDefines.Add("BUILD_PROFILE_LOADED");
+                loadedFile.scriptingDefines = currDefines.ToArray();
+                AssetDatabase.Refresh();
+            }
         }
         #endregion
     }
@@ -233,6 +256,15 @@ namespace Whitesock
                     profile = loadedFile;
                 PlatformsVisiblity.Add(visibility);
                 ConfigFiles.Add(profile);
+                
+                if (ConfigFiles[^1] != null && !ConfigFiles[^1].scriptingDefines.Contains("BUILD_PROFILE_LOADED"))
+                {
+                    List<string> currDefines = new List<string>();
+                    currDefines.AddRange(ConfigFiles[^1].scriptingDefines);
+                    currDefines.Add("BUILD_PROFILE_LOADED");
+                    ConfigFiles[^1].scriptingDefines = currDefines.ToArray();
+                    AssetDatabase.Refresh();
+                }
             }
         }
         public void Clear()
