@@ -8,7 +8,7 @@ on:
         value: ${{ jobs.MatrixFile.outputs.state }}
       file: 
         description: 'Matrix file'
-        value: ${{ steps.get_file.outputs.file }}
+        value: ${{ jobs.MatrixFile.outputs.file }}
     
 jobs:
   MatrixFile:
