@@ -197,10 +197,12 @@ namespace Whitesock
             
             if (!loadedFile.scriptingDefines.Contains("BUILD_PROFILE_LOADED"))
             {
+                
                 List<string> currDefines = new List<string>();
                 currDefines.AddRange(loadedFile.scriptingDefines);
                 currDefines.Add("BUILD_PROFILE_LOADED");
                 loadedFile.scriptingDefines = currDefines.ToArray();
+                EditorUtility.SetDirty(loadedFile);
                 AssetDatabase.Refresh();
             }
         }
@@ -256,15 +258,6 @@ namespace Whitesock
                     profile = loadedFile;
                 PlatformsVisiblity.Add(visibility);
                 ConfigFiles.Add(profile);
-                
-                if (ConfigFiles[^1] != null && !ConfigFiles[^1].scriptingDefines.Contains("BUILD_PROFILE_LOADED"))
-                {
-                    List<string> currDefines = new List<string>();
-                    currDefines.AddRange(ConfigFiles[^1].scriptingDefines);
-                    currDefines.Add("BUILD_PROFILE_LOADED");
-                    ConfigFiles[^1].scriptingDefines = currDefines.ToArray();
-                    AssetDatabase.Refresh();
-                }
             }
         }
         public void Clear()
