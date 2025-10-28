@@ -13,32 +13,15 @@ readarray -d "-" -t splitted <<< "$repoName"
 min=$(( ${#splitted[@]} > 1 ? 1 : 0 ))
 # client_name-repo_name -> repo_name; messyreponame -> messyreponame
 projectName="${splitted[${min}]}"
-# Continue splitting by underscore (_)
-readarray -d "_" -t splitted <<< "$projectName"
-formattedProjName=""
-# Then cycle through all the available parts and add it to the final variable
-for (( n=0; n < ${#splitted[*]}; n++))
-do
-    # The ^ in splitted[n]^ force the first char of the string splitted[n] to be uppercase. 
-    formattedProjName+="${splitted[n]^}"
-done
-echo $formattedProjName
+
+echo $projectName
 # Register the formatted project name to the GITHUB_OUTPUT's project_name variable. 
 # This output is then used inside the job 'outputs' to register a variable.
-echo "name=${formattedProjName}" >> $GITHUB_OUTPUT 
+echo "name=${projectName}" >> $GITHUB_OUTPUT 
 
 if [[ "$min" == 1 ]]; then
     readarray -d "-" -t splitted <<< "$repoName"
     clientName="${splitted[0]}"
-    # Continue splitting by underscore (_)
-    readarray -d "_" -t splitted <<< "$clientName"
-    formattedClientName=""
-    # Then cycle through all the available parts and add it to the final variable
-    for (( n=0; n < ${#splitted[*]}; n++))
-    do
-        # The ^ in splitted[n]^ force the first char of the string splitted[n] to be uppercase. 
-        formattedClientName+="${splitted[n]^}"
-    done
-    echo $formattedClientName
-    echo "client=${formattedClientName}" >> $GITHUB_OUTPUT 
+    echo $clientName
+    echo "client=${clientName}" >> $GITHUB_OUTPUT
 fi

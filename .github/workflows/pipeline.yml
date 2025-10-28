@@ -22,14 +22,11 @@ jobs:
   get-names:
     name: Get project and client name
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - id: names
-        # launch the script 'get-project-name.sh' that returns the repo name but in PascalCase. 
-        run: ./.github/script/get-project-name.sh
-        # The env section specifies environment variables that can be used inside the job. In this case values are passed from the job to the script.
+        run: ./.github/script/get-names.sh
         env:
           REPO_NAME: ${{ github.repository }} 
     outputs:
@@ -42,5 +39,16 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/build-repo.yml
     with:
-      matrixFile: ${{needs.check-matrix.outputs.file}}
+      matrix-file: ${{needs.check-matrix.outputs.file}}
+  upload-repo:
+    name:  Upload Repo
+    needs: [check-license,check-matrix, build-repo, get-names]
+    if: needs.check-license.outputs.state != '' && needs.check-matrix.outputs.state != '' && false
+    secrets: inherit
+    uses: ./.github/workflows/upload-build.yml
+    with:
+      matrix-file: ${{needs.check-matrix.outputs.file}}
+      project-name: ${{needs.get-names.outputs.name}}
+      client-name: ${{needs.get-names.outputs.client}}
+      
   

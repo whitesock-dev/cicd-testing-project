@@ -2,11 +2,10 @@ name: Build Repo
 on: 
   workflow_call:
     inputs:
-      matrixFile:
+      matrix-file:
         description: 'Matrix file'
         required: true
         type: string
-      
 
 permissions:
   contents: write
@@ -15,24 +14,18 @@ jobs:
 
   build-project:
     runs-on: ubuntu-latest
-    # if: >-
-    #   ${{ !github.event.repository.is_template }}
     strategy:
-      matrix: ${{ fromJSON(inputs.matrixFile) }}
+      matrix: ${{ fromJSON(inputs.matrix-file) }}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     name: Build project for  ${{ matrix.platformName }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - name: ${{ matrix.platformName }} external file
         uses: ./.github/script/build-workflow
         with:
           platform: ${{ matrix.platformName }}
-          targetPlatform: ${{ matrix.targetPlatform }}
-          configFile: ${{ matrix.configFile }}
+          target-platform: ${{ matrix.targetPlatform }}
+          config-file: ${{ matrix.configFile }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}

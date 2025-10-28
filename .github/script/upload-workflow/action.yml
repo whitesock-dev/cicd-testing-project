@@ -1,26 +1,23 @@
-name: Android sub pipeline
+name: Upload Workflow
 inputs:
-  targetPlatform:
-    required: true
-    description: "Target platform"
   platform:
     required: true
     description: "Current platform"
-  configFile:
+  AWS_KEY:
     required: true
-    description: "Config file"
-  UNITY_EMAIL:
+    description: "AWS KEY"
+  AWS_SECRET_KEY:
     required: true
-    description: "Unity Mail"
-  UNITY_PASSWORD:
+    description: "AWS SECRET KEY"
+  AWS_BUCKET:
     required: true
-    description: "Unity Password"
-  UNITY_SERIAL:
+    description: "AWS BUCKET NAME"
+  project-name:
     required: true
-    description: "Unity License"
-  GITHUB_TOKEN:
+    description: "Project name"
+  client-name:
     required: true
-    description: "Github Token"
+    description: "Client name"
   
 
 
@@ -34,54 +31,17 @@ runs:
   steps:
     - name: Check out code
       uses: actions/checkout@v3
-    - name: Echo stuff
-      run: |
-        echo ${{ inputs.targetPlatform }}
-        echo ${{ inputs.platform }}
-        echo ${{ inputs.configFile }}
-      shell: bash
-    - name: List LFS files
-      run: |
-        echo ${{ matrix.platformName }}
-        git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
-      shell: bash
-    - name: Restore cache for LFS
-      uses: actions/cache@v3
-      id: cache-lfs
+    - name: Download Webgl Artifact
+      if: ${{ inputs.platform == 'webgl' }}
+      uses: actions/download-artifact@v4
       with:
-        path: .git/lfs
-        key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }} 
-    - name: Pull LFS
-      run: |
-          git lfs pull
-          git add .
-          git reset --hard
-      shell: bash
-    - name: Cache build
-      uses: actions/cache@v3
+        path: build-${{ inputs.platform }}-extract
+    - name: Upload to S3 bucket
+      if: ${{ inputs.platform == 'webgl' }}
+      uses: shallwefootball/upload-s3-action@v1.2.0
       with:
-        path: ./TestingProject_Unity/Library
-        key: Library-TestingProject-${{ inputs.targetPlatform }}
-        restore-keys: |
-          Library-TestingProject-${{ inputs.targetPlatform }}
-          Library-${{ inputs.targetPlatform }}
-    - name: Builder
-      id: build-step
-      uses: game-ci/unity-builder@v4
-      env:
-        UNITY_EMAIL: ${{ inputs.UNITY_EMAIL }}
-        UNITY_PASSWORD: ${{ inputs.UNITY_PASSWORD }}
-        UNITY_SERIAL: ${{ inputs.UNITY_SERIAL }}
-      with:
-        # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
-        targetPlatform: ${{ inputs.targetPlatform }}
-        projectPath: ./TestingProject_Unity
-        buildProfile: ${{ inputs.configFile }}
-        buildsPath: build-${{ inputs.platform }}
-    - name: Upload build
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-${{ inputs.platform }}
-        path: build-${{ inputs.platform }}
-      env:
-        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+          aws_key_id: ${{inputs.AWS_KEY}}
+          aws_secret_access_key: ${{ inputs.AWS_SECRET_KEY }}
+          aws_bucket: ${{inputs.AWS_BUCKET}}
+          source_dir: build-${{ inputs.platform }}-extract
+          destination_dir: ${{inputs.client-name}}/${{ inputs.project-name }}
