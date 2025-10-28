@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# IF THE WORKFLOW FAILS BECAUSE OF PERMISSION USE THIS COMMAND IN GIT SHELL: 'git update-index --chmod=+x ./github/script/get-project-name.sh'
+# IF THE WORKFLOW FAILS BECAUSE OF PERMISSION USE THIS COMMAND IN GIT SHELL: 'git update-index --chmod=+x ./.github/script/get-project-name.sh'
 # REPO_NAME contains the github.repository value which is owner/repo-name.
 echo "${REPO_NAME}"
 # Split by / and taking the element at index 1 (owner/repo-name -> repo-name)
