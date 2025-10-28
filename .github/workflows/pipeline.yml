@@ -25,3 +25,5 @@ jobs:
     if: needs.CheckLicense.outputs.state != '' && needs.CheckMatrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/build-repo.yml
+    with:
+      matrixFile: ${{needs.CheckMatrix.outputs.file}}

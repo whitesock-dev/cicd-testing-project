@@ -1,6 +1,12 @@
 name: Build Repo
-on:
+on: 
   workflow_call:
+    inputs:
+      matrixFile:
+        description: 'Matrix file'
+        required: true
+        type: string
+      
 
 permissions:
   contents: write
@@ -9,11 +15,10 @@ jobs:
 
   build-project:
     runs-on: ubuntu-latest
-    if: >-
-      ${{ !github.event.repository.is_template
-          && needs.matrix_file_exist.outputs.state != ''}}
+    # if: >-
+    #   ${{ !github.event.repository.is_template }}
     strategy:
-      matrix: ${{ fromJSON(needs.matrix_file_exist.outputs.file) }}
+      matrix: ${{ fromJSON(inputs.matrixFile) }}
     outputs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     name: Build project for  ${{ matrix.platformName }}
@@ -22,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: ${{ matrix.platformName }}'s external file
+      - name: ${{ matrix.platformName }} external file
         uses: ./.github/script/build-workflow
         with:
           platform: ${{ matrix.platformName }}

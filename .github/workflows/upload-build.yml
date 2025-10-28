@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: ${{ matrix.platformName }}'s external file
+      - name: ${{ matrix.platformName }} external file
         uses: ./.github/script/build-workflow
         with:
           platform: ${{ matrix.platformName }}
