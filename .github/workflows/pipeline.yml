@@ -1,4 +1,4 @@
-name: Initialise Repo
+name: Main Pipeline
 on:
   workflow_dispatch:
   push:
@@ -43,7 +43,7 @@ jobs:
   upload-repo:
     name:  Upload Repo
     needs: [check-license,check-matrix, build-repo, get-names]
-    if: needs.check-license.outputs.state != '' && needs.check-matrix.outputs.state != '' && false
+    if: needs.check-license.outputs.state != '' && needs.check-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/upload-build.yml
     with:
