@@ -5,13 +5,13 @@ on:
     outputs:
       state:
         description: 'File state'
-        value: ${{ jobs.MatrixFile.outputs.state }}
+        value: ${{ jobs.matrix-file.outputs.state }}
       file: 
         description: 'Matrix file'
-        value: ${{ jobs.MatrixFile.outputs.file }}
+        value: ${{ jobs.matrix-file.outputs.file }}
     
 jobs:
-  MatrixFile:
+  matrix-file:
     name: Check matrix file
     runs-on: ubuntu-latest
     steps:
