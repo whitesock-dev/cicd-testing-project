@@ -6,6 +6,10 @@ on:
         description: 'Matrix file'
         required: true
         type: string
+      formatted-name:
+        description: 'Project name formatted'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -30,6 +34,7 @@ jobs:
           platform: ${{ matrix.platformName }}
           target-platform: ${{ matrix.targetPlatform }}
           config-file: ${{ matrix.configFile }}
+          formatted-name: ${{ inputs.formatted-name }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}

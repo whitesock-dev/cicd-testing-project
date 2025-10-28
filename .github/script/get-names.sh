@@ -19,6 +19,18 @@ echo $projectName
 # This output is then used inside the job 'outputs' to register a variable.
 echo "name=${projectName}" >> $GITHUB_OUTPUT 
 
+# Continue splitting by underscore (_)
+readarray -d "_" -t splitted <<< "$projectName"
+formattedProjName=""
+# Then cycle through all the available parts and add it to the final variable
+for (( n=0; n < ${#splitted[*]}; n++))
+do
+    # The ^ in splitted[n]^ force the first char of the string splitted[n] to be uppercase. 
+    formattedProjName+="${splitted[n]^}"
+done
+echo $formattedProjName
+echo "formatted-name=${formattedProjName}" >> $GITHUB_OUTPUT
+
 # If the taken value is at index 1, it means client name is available at index 0
 if [[ "$min" == 1 ]]; then
     readarray -d "-" -t splitted <<< "$repoName"

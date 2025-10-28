@@ -9,6 +9,9 @@ inputs:
   config-file:
     required: true
     description: "Config file"
+  formatted-name:
+    required: true
+    description: "Project formatted name"
   UNITY_EMAIL:
     required: true
     description: "Unity Mail"
@@ -60,10 +63,10 @@ runs:
     - name: Cache build
       uses: actions/cache@v3
       with:
-        path: ./TestingProject_Unity/Library
-        key: Library-TestingProject-${{ inputs.target-platform }}
+        path: ./${{ inputs.formatted-name }}_Unity/Library
+        key: Library-${{ inputs.formatted-name }}-${{ inputs.target-platform }}
         restore-keys: |
-          Library-TestingProject-${{ inputs.target-platform }}
+          Library-${{ inputs.formatted-name }}-${{ inputs.target-platform }}
           Library-${{ inputs.target-platform }}
     - name: Builder
       id: build-step
@@ -74,8 +77,8 @@ runs:
         UNITY_SERIAL: ${{ inputs.UNITY_SERIAL }}
       with:
         # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
-        target-platform: ${{ inputs.target-platform }}
-        projectPath: ./TestingProject_Unity
+        targetPlatform: ${{ inputs.target-platform }}
+        projectPath: ./${{ inputs.formatted-name }}_Unity
         buildProfile: ${{ inputs.config-file }}
         buildsPath: build-${{ inputs.platform }}
     - name: Upload build

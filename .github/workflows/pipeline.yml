@@ -32,14 +32,16 @@ jobs:
     outputs:
       name: ${{ steps.names.outputs.name }}
       client: ${{ steps.names.outputs.client }}
+      formatted-name: ${{ steps.names.outputs.formatted-name }}
   build-repo:
     name:  Build Repo
-    needs: [check-license,check-matrix]
+    needs: [check-license,check-matrix, get-names]
     if: needs.check-license.outputs.state != '' && needs.check-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/build-repo.yml
     with:
       matrix-file: ${{needs.check-matrix.outputs.file}}
+      formatted-name: ${{needs.get-names.outputs.formatted-name}}
   upload-repo:
     name:  Upload Repo
     needs: [check-license,check-matrix, build-repo, get-names]
