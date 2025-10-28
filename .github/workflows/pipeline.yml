@@ -41,7 +41,7 @@ jobs:
     uses: ./.github/workflows/build-repo.yml
     with:
       matrix-file: ${{needs.check-matrix.outputs.file}}
-      formatted-name: ${{needs.get-names.outputs.formatted-name}}
+      formatted-name: ${{needs.get-names.outputs.formatted-name}} 
   upload-repo:
     name:  Upload Repo
     needs: [check-license,check-matrix, build-repo, get-names]
@@ -52,5 +52,6 @@ jobs:
       matrix-file: ${{needs.check-matrix.outputs.file}}
       project-name: ${{needs.get-names.outputs.name}}
       client-name: ${{needs.get-names.outputs.client}}
+      version: ${{needs.build-repo.outputs.version}}
       
   

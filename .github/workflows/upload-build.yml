@@ -14,13 +14,17 @@ on:
         description: "Client name"
         required: true
         type: string
+      version:
+        description: "Build version"
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 jobs:
 
-  build-project:
+  upload-project:
     runs-on: ubuntu-latest
     # if: >-
     #   ${{ !github.event.repository.is_template }}
@@ -43,3 +47,4 @@ jobs:
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
           project-name: ${{ inputs.project-name }}  
           client-name: ${{ inputs.client-name }}  
+          version: ${{ inputs.version }}  

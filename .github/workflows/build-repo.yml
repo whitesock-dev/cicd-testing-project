@@ -10,6 +10,10 @@ on:
         description: 'Project name formatted'
         required: true
         type: string
+    outputs:
+      version:
+        description: 'Version info'
+        value: ${{ jobs.build-project.outputs.buildVersion }}
 
 permissions:
   contents: write

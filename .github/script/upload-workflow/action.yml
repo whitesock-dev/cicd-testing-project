@@ -18,8 +18,9 @@ inputs:
   client-name:
     required: true
     description: "Client name"
-  
-
+  version:
+      required: true
+      description: "Build version"
 
 # outputs:
 #   random:
@@ -35,6 +36,7 @@ runs:
       if: ${{ inputs.platform == 'webgl' }}
       uses: actions/download-artifact@v4
       with:
+        name: build-${{ inputs.platform }}
         path: build-${{ inputs.platform }}-extract
     - name: Upload to S3 bucket
       if: ${{ inputs.platform == 'webgl' }}
@@ -44,4 +46,4 @@ runs:
           aws_secret_access_key: ${{ inputs.AWS_SECRET_KEY }}
           aws_bucket: ${{inputs.AWS_BUCKET}}
           source_dir: build-${{ inputs.platform }}-extract
-          destination_dir: ${{inputs.client-name}}/${{ inputs.project-name }}
+          destination_dir: ${{inputs.client-name}}/${{ inputs.project-name }}/${{ inputs.version }}
