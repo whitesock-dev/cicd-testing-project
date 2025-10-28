@@ -20,6 +20,10 @@ jobs:
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     name: Build project for  ${{ matrix.platformName }}
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: ${{ matrix.platformName }} external file
         uses: ./.github/script/build-workflow
         with:

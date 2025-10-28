@@ -35,7 +35,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: ${{ matrix.platformName }} external file
-        uses: ./.github/script/build-workflow
+        uses: ./.github/script/upload-workflow
         with:
           platform: ${{ matrix.platformName }}
           AWS_KEY: ${{ secrets.AWS_KEY }}

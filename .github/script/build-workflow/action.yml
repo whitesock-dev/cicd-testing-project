@@ -1,4 +1,4 @@
-name: Android sub pipeline
+name: Build sub pipeline
 inputs:
   target-platform:
     required: true
