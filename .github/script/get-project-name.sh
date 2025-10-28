@@ -28,8 +28,8 @@ echo $formattedProjName
 echo "name=${formattedProjName}" >> $GITHUB_OUTPUT 
 
 if [[ "$min" == 1 ]]; then
-    min=0
-    clientName="${splitted[${min}]}"
+    readarray -d "-" -t splitted <<< "$repoName"
+    clientName="${splitted[0]}"
     # Continue splitting by underscore (_)
     readarray -d "_" -t splitted <<< "$clientName"
     formattedClientName=""
