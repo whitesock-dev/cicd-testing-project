@@ -32,18 +32,26 @@ runs:
   steps:
     - name: Check out code
       uses: actions/checkout@v3
+    - name: Find Tag
+      id: semantic
+      uses: paulhatch/semantic-version@v5.0.2
+      with:
+        tag_prefix: "v"
+        major_pattern: "[MAJOR]"
+        minor_pattern: "[MINOR]"
+        version_format: "${major}.${minor}.${patch}"
     - name: Download Webgl Artifact
       uses: actions/download-artifact@v4
       with:
         name: build-${{ inputs.platform }}
-        path: build-${{ inputs.platform }}-extract
+        path: build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}
     - name: Zip artifact
       run: |
-        zip -r build-${{ inputs.platform }}.zip build-${{ inputs.platform }}-extract
+        zip -r build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}
       shell: bash
     - name: Upload Directory to S3
       run: |
-        aws s3 sync ./build-${{ inputs.platform }}-extract/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/
+        aws s3 sync ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/
       env:
         AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
@@ -51,9 +59,10 @@ runs:
       shell: bash 
     - name: Upload Zip to S3
       run: |
-        aws s3 cp ./build-${{ inputs.platform }}.zip s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/build-${{ inputs.platform }}.zip
+        aws s3 cp ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
       env:
         AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
         AWS_DEFAULT_REGION: 'eu-west-3'
       shell: bash
+      # versioning
