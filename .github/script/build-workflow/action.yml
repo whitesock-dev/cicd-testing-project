@@ -60,7 +60,7 @@ runs:
       shell: bash
     - name: Echo version
       run: |
-        echo "Testing the semantic - 2"
+        echo "Testing the semantic - 3"
         echo ${{steps.semantic.outputs.version_tag}}
       shell: bash
     - name: List LFS files
