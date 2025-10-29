@@ -51,7 +51,7 @@ runs:
       shell: bash
     - name: Upload Directory to S3
       run: |
-        aws s3 sync ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/
+        aws s3 sync ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{steps.semantic.outputs.version_tag}}/
       env:
         AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
@@ -59,7 +59,7 @@ runs:
       shell: bash 
     - name: Upload Zip to S3
       run: |
-        aws s3 cp ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
+        aws s3 cp ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{steps.semantic.outputs.version_tag}}/build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
       env:
         AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
