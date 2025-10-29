@@ -48,9 +48,15 @@ runs:
       uses: paulhatch/semantic-version@v5.0.2
       with:
         tag_prefix: "v"
+        bump_each_commit: false
         major_pattern: "/BREAKING CHANGE:|realese:/"
         minor_pattern:  "/feat:/"
         version_format: "${major}.${minor}.${patch}-${increment}"
+    - name: Set Tag
+      id: version
+      run: |
+        git tag ${{steps.semantic.outputs.version_tag}}
+        git push origin ${{steps.semantic.outputs.version_tag}}
     - name: Echo version
       run: |
         echo "Testing the semantic - 2"
