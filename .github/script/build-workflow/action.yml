@@ -42,6 +42,7 @@ runs:
         echo ${{ inputs.target-platform }}
         echo ${{ inputs.platform }}
         echo ${{ inputs.config-file }}
+        git tag
       shell: bash
     - name: Find Tag
       id: semantic
