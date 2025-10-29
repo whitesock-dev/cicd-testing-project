@@ -48,10 +48,9 @@ runs:
       uses: paulhatch/semantic-version@v5.0.2
       with:
         tag_prefix: "v"
-        bump_each_commit: false
         major_pattern: "/BREAKING CHANGE:|realese:/"
         minor_pattern:  "/feat:/"
-        version_format: "${major}.${minor}.${patch}-${increment}"
+        version_format: "${major}.${minor}.${patch}"
     - name: Set Tag
       id: version
       run: |
