@@ -53,6 +53,7 @@ runs:
         version_format: "${major}.${minor}.${patch}-${increment}"
     - name: Echo version
       run: |
+        echo "Testing the semantic"
         echo ${{steps.semantic.outputs.version_tag}}
       shell: bash
     - name: List LFS files
