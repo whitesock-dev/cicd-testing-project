@@ -43,6 +43,17 @@ runs:
         echo ${{ inputs.platform }}
         echo ${{ inputs.config-file }}
       shell: bash
+    - name: Find Tag
+      id: semantic
+      uses: paulhatch/semantic-version@v5.0.2
+      with:
+        tag_prefix: "v"
+        major_pattern: "/BREAKING CHANGE:|realese:/"
+        minor_pattern:  "/feat:/"
+        version_format: "${major}.${minor}.${patch}-${increment}"
+    - name: Echo version
+      run: |
+        echo ${{steps.semantic.outputs.version_tag}}
     - name: List LFS files
       run: |
         echo ${{ matrix.platformName }}

@@ -37,9 +37,12 @@ runs:
       uses: paulhatch/semantic-version@v5.0.2
       with:
         tag_prefix: "v"
-        major_pattern: "[MAJOR]"
-        minor_pattern: "[MINOR]"
-        version_format: "${major}.${minor}.${patch}"
+        major_pattern: "/BREAKING CHANGE:|realese:/"
+        minor_pattern:  "/feat:/"
+        version_format: "${major}.${minor}.${patch}-${increment}"
+    - name: Echo version
+      run: |
+        echo ${{steps.semantic.outputs.version_tag}}
     - name: Download Webgl Artifact
       uses: actions/download-artifact@v4
       with:
