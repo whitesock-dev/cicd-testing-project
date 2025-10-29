@@ -57,6 +57,7 @@ runs:
       run: |
         git tag ${{steps.semantic.outputs.version_tag}}
         git push origin ${{steps.semantic.outputs.version_tag}}
+      shell: bash
     - name: Echo version
       run: |
         echo "Testing the semantic - 2"
