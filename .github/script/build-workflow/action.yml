@@ -54,6 +54,7 @@ runs:
     - name: Echo version
       run: |
         echo ${{steps.semantic.outputs.version_tag}}
+      shell: bash
     - name: List LFS files
       run: |
         echo ${{ matrix.platformName }}

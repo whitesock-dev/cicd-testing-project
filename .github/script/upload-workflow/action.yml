@@ -43,6 +43,7 @@ runs:
     - name: Echo version
       run: |
         echo ${{steps.semantic.outputs.version_tag}}
+      shell: bash
     - name: Download Webgl Artifact
       uses: actions/download-artifact@v4
       with:
