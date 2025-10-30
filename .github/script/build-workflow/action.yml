@@ -55,9 +55,6 @@ runs:
         major_pattern: "/BREAKING CHANGE:|realese:/"
         minor_pattern:  "/feat:/"
         version_format: "${major}.${minor}.${patch}"
-        use_branches: true
-        search_commit_body: true
-        branch: main
     - name: Set Tag
       id: version
       run: |
