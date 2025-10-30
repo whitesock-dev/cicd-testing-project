@@ -49,7 +49,7 @@ runs:
         git tag ${{steps.semantic.outputs.version_tag}}
         git push origin ${{steps.semantic.outputs.version_tag}}
       shell: bash
-    - name: Echo version
+    - name: Print version
       run: |
         echo ${{steps.semantic.outputs.version_tag}}
       shell: bash
