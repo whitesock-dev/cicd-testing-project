@@ -78,4 +78,9 @@ runs:
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
         AWS_DEFAULT_REGION: 'eu-west-3'
       shell: bash
-      # versioning
+    - name: Create a release
+      name: Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        files: ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
