@@ -55,7 +55,7 @@ runs:
         version_format: "${major}.${minor}.${patch}"
         use_branches: true
         search_commit_body: true
-        branch: develop
+        branch: main
     - name: Set Tag
       id: version
       run: |
