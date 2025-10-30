@@ -84,3 +84,4 @@ runs:
       if: github.ref_type == 'tag'
       with:
         files: ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
+
