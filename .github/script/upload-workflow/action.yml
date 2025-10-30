@@ -40,10 +40,10 @@ runs:
       with:
         tag_prefix: "v"
         bump_each_commit: true
-        major_pattern: "/BREAKING CHANGE:|realese:/"
+        major_pattern: "/BREAKING CHANGE:|release:/"
         minor_pattern:  "/feat:/"
         version_format: "${major}.${minor}.${patch}"
-    - name: Set Tag
+    - name: Set Version Tag
       id: version
       run: |
         git tag ${{steps.semantic.outputs.version_tag}}
