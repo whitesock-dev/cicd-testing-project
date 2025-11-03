@@ -46,7 +46,7 @@ runs:
     - name: Set Version Tag
       id: version
       run: |
-        git tag ${{steps.semantic.outputs.version_tag}}
+        git tag ${{steps.semantic.outputs.version_tag}} 
         git push origin ${{steps.semantic.outputs.version_tag}}
       shell: bash
     - name: Print version
