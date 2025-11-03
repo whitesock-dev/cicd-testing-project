@@ -82,4 +82,6 @@ runs:
       uses: softprops/action-gh-release@v2
       with:
         files: ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
+        tag_name: ${{steps.semantic.outputs.version_tag}}
+        name: ${{steps.semantic.outputs.version_tag}}
 
