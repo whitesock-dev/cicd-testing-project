@@ -47,4 +47,5 @@ jobs:
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
           project-name: ${{ inputs.project-name }}  
           client-name: ${{ inputs.client-name }}  
-          version: ${{ inputs.version }}  
+          version: ${{ inputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
