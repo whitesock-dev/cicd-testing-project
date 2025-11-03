@@ -84,6 +84,7 @@ runs:
     - name: Build Changelog
       id: github_release
       uses: mikepenz/release-changelog-builder-action@v5
+      mode: "COMMIT"
       env:
         GITHUB_TOKEN: ${{inputs.GITHUB_TOKEN}}
     - name: Create a release
