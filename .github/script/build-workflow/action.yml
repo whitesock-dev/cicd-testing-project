@@ -51,7 +51,7 @@ runs:
       run: |
         echo ${{ inputs.target-platform }}
         echo ${{ inputs.platform }}
-        echo ${{ inputs.config-file }}
+        echo ${{ inputs.config-file }} 
         git tag
       shell: bash
     - name: List LFS files
