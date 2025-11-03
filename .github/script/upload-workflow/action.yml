@@ -81,7 +81,7 @@ runs:
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
         AWS_DEFAULT_REGION: 'eu-west-3'
       shell: bash
-    - name: Build Changelog
+    - name: Build Changelog 
       id: github_release
       uses: mikepenz/release-changelog-builder-action@v5
       mode: "COMMIT"
