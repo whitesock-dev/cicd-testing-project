@@ -89,7 +89,9 @@ runs:
     - name: Create a release
       uses: softprops/action-gh-release@v2
       with:
+        body: ${{steps.github_release.outputs.changelog}}
         files: ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
         tag_name: ${{steps.semantic.outputs.version_tag}}
         name: ${{steps.semantic.outputs.version_tag}}
+
 
