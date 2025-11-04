@@ -33,9 +33,16 @@ jobs:
       name: ${{ steps.names.outputs.name }}
       client: ${{ steps.names.outputs.client }}
       formatted-name: ${{ steps.names.outputs.formatted-name }}
+  get-version:
+    name: Get Version
+    needs: [check-license,check-matrix]
+    secrets: inherit
+    uses: ./.github/workflows/get-version.yml
+    with:
+      appply-version: false
   build-repo:
     name:  Build Repo
-    needs: [check-license,check-matrix, get-names]
+    needs: [check-license,check-matrix, get-names, get-version]
     if: needs.check-license.outputs.state != '' && needs.check-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/build-repo.yml
