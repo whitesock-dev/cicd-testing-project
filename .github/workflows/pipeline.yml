@@ -38,15 +38,17 @@ jobs:
   cleanup-space:
     name: Clean up space
     needs: [check-license,get-matrix, get-names]
-    uses: jlumbroso/free-disk-space@main
-    with:
-      tool-cache: false
-      android: true
-      dotnet: true
-      haskell: true
-      large-packages: true
-      docker-images: true
-      swap-storage: true
+    steps: 
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
   build-repo:
     name:  Build Repo
     needs: [check-license,get-matrix, get-names, cleanup-space]
