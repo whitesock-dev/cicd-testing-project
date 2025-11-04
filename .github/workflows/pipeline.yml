@@ -35,9 +35,21 @@ jobs:
       name: ${{ steps.names.outputs.name }}
       client: ${{ steps.names.outputs.client }}
       formatted-name: ${{ steps.names.outputs.formatted-name }}
+  cleanup-space:
+    name: Clean up space
+    needs: [check-license,get-matrix, get-names]
+    uses: jlumbroso/free-disk-space@main
+    with:
+      tool-cache: false
+      android: true
+      dotnet: true
+      haskell: true
+      large-packages: true
+      docker-images: true
+      swap-storage: true
   build-repo:
     name:  Build Repo
-    needs: [check-license,get-matrix, get-names]
+    needs: [check-license,get-matrix, get-names, cleanup-space]
     if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/build-repo.yml
@@ -53,7 +65,7 @@ jobs:
       appply-version: true
   upload-repo:
     name:  Upload Repo
-    needs: [check-license,get-matrix, get-names, get-version, build-repo]
+    needs: [check-license,get-matrix, get-names, cleanup-space, get-version, build-repo]
     if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/upload-build.yml
