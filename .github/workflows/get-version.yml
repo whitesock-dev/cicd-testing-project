@@ -26,8 +26,6 @@ jobs:
           branch=$(git rev-parse --abbrev-ref HEAD)
           if [ $branch == "develop" ]; then 
           echo "namespace=d" >> $GITHUB_OUTPUT
-          else
-          echo "namespace=''" >> $GITHUB_OUTPUT
           fi
         shell: bash
       - name: Create version
@@ -40,15 +38,15 @@ jobs:
           minor_pattern:  "/feat:/"
           version_format: "${major}.${minor}.${patch}"
           namespace: ${{steps.branch.outputs.namespace}} 
+      - name: Print version
+        run: |
+          echo ${{steps.semantic.outputs.version_tag}}
+        shell: bash
       - name: Set Version Tag
         if: ${{ inputs.appply-version }}
         run: |
           git tag ${{steps.semantic.outputs.version_tag}} 
           git push origin ${{steps.semantic.outputs.version_tag}}
-        shell: bash
-      - name: Print version
-        run: |
-          echo ${{steps.semantic.outputs.version_tag}}
         shell: bash
     outputs:
       version: ${{ steps.semantic.outputs.version_tag }}
