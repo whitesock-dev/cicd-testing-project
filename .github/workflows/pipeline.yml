@@ -38,6 +38,7 @@ jobs:
   cleanup-space:
     name: Clean up space
     needs: [check-license,get-matrix, get-names]
+    runs-on: ubuntu-latest
     steps: 
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
