@@ -1,0 +1,39 @@
+name: Get Matrix File
+
+on: 
+  workflow_call:
+    outputs:
+      state:
+        description: 'File state'
+        value: ${{ jobs.matrix-file.outputs.state }}
+      file: 
+        description: 'Matrix file'
+        value: ${{ jobs.matrix-file.outputs.file }}
+    
+jobs:
+  matrix-file:
+    name: Get matrix file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - id: get_state
+        name: Get state
+        run: |
+          echo 'state=${{ hashFiles('.github/config/platform-matrix.json') }}' >> $GITHUB_OUTPUT
+      - name: Get File fails
+        if:  ${{ steps.get_state.outputs.state == '' }} 
+        run: |
+          echo "Get matrix file fails because the file doesnt exists"
+      - id: get_file
+        name: Get file
+        if:  ${{ steps.get_state.outputs.state != '' }} 
+        run: |
+          jsonFile="$(cat .github/config/platform-matrix.json)"
+          echo "$jsonFile"
+          jsonFile=$(echo $jsonFile|tr -d '\n')
+          echo "$jsonFile"
+          echo "file=$jsonFile" >> $GITHUB_OUTPUT
+    outputs:
+      state: ${{ steps.get_state.outputs.state }}
+      file: ${{ steps.get_file.outputs.file }}

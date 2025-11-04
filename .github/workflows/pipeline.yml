@@ -1,0 +1,66 @@
+name: Main Pipeline
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - production
+      - main
+      - develop
+
+permissions:
+  contents: write
+
+jobs:
+  check-license:
+    name: Check Unity License
+    secrets: inherit
+    uses: ./.github/workflows/check-license.yml
+  get-matrix:
+    name: Get Matrix File
+    needs: [check-license]
+    if: needs.check-license.outputs.state != ''
+    secrets: inherit
+    uses: ./.github/workflows/get-matrix.yml
+  get-names:
+    name: Get project and client name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - id: names
+        run: ./.github/script/get-names.sh
+        env:
+          REPO_NAME: ${{ github.repository }} 
+    outputs:
+      name: ${{ steps.names.outputs.name }}
+      client: ${{ steps.names.outputs.client }}
+      formatted-name: ${{ steps.names.outputs.formatted-name }}
+  build-repo:
+    name:  Build Repo
+    needs: [check-license,get-matrix, get-names]
+    if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
+    secrets: inherit
+    uses: ./.github/workflows/build-repo.yml
+    with:
+      matrix-file: ${{needs.get-matrix.outputs.file}}
+      formatted-name: ${{needs.get-names.outputs.formatted-name}} 
+  get-version:
+    name: Get Version
+    needs: [build-repo]
+    secrets: inherit
+    uses: ./.github/workflows/get-version.yml
+    with:
+      appply-version: true
+  upload-repo:
+    name:  Upload Repo
+    needs: [check-license,get-matrix, get-names, get-version, build-repo]
+    if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
+    secrets: inherit
+    uses: ./.github/workflows/upload-build.yml
+    with:
+      matrix-file: ${{needs.get-matrix.outputs.file}}
+      project-name: ${{needs.get-names.outputs.name}}
+      client-name: ${{needs.get-names.outputs.client}}
+      version: ${{needs.get-version.outputs.version}}
+      
+  

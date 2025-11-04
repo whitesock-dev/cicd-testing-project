@@ -1,0 +1,101 @@
+name: Build sub pipeline
+inputs:
+  target-platform:
+    required: true
+    description: "Target platform"
+  platform:
+    required: true
+    description: "Current platform"
+  config-file:
+    required: true
+    description: "Config file"
+  formatted-name:
+    required: true
+    description: "Project formatted name"
+  UNITY_EMAIL:
+    required: true
+    description: "Unity Mail"
+  UNITY_PASSWORD:
+    required: true
+    description: "Unity Password"
+  UNITY_SERIAL:
+    required: true
+    description: "Unity License"
+  GITHUB_TOKEN:
+    required: true
+    description: "Github Token"
+  
+
+
+# outputs:
+#   random:
+#     description: "Example output"
+#     value: ${{ steps.step1.outputs.random }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+      with:
+        tool-cache: false
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: true
+    - name: Check out code
+      uses: actions/checkout@v3
+    - name: Echo stuff
+      run: |
+        echo ${{ inputs.target-platform }}
+        echo ${{ inputs.platform }}
+        echo ${{ inputs.config-file }} 
+        git tag
+      shell: bash
+    - name: List LFS files
+      run: |
+        echo ${{ matrix.platformName }}
+        git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      shell: bash
+    - name: Restore cache for LFS
+      uses: actions/cache@v3
+      id: cache-lfs
+      with:
+        path: .git/lfs
+        key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }} 
+    - name: Pull LFS
+      run: |
+          git lfs pull
+          git add .
+          git reset --hard
+      shell: bash
+    - name: Cache build
+      uses: actions/cache@v3
+      with:
+        path: ./${{ inputs.formatted-name }}_Unity/Library
+        key: Library-${{ inputs.formatted-name }}-${{ inputs.target-platform }}
+        restore-keys: |
+          Library-${{ inputs.formatted-name }}-${{ inputs.target-platform }}
+          Library-${{ inputs.target-platform }}
+    - name: Builder
+      id: build-step
+      uses: game-ci/unity-builder@v4
+      env:
+        UNITY_EMAIL: ${{ inputs.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ inputs.UNITY_PASSWORD }}
+        UNITY_SERIAL: ${{ inputs.UNITY_SERIAL }}
+      with:
+        # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
+        targetPlatform: ${{ inputs.target-platform }}
+        projectPath: ./${{ inputs.formatted-name }}_Unity
+        buildProfile: ${{ inputs.config-file }}
+        buildsPath: build-${{ inputs.platform }}
+    - name: Upload build
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ inputs.platform }}
+        path: build-${{ inputs.platform }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}

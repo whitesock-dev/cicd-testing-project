@@ -1,0 +1,55 @@
+name: Upload Build
+on: 
+  workflow_call:
+    inputs:
+      matrix-file:
+        description: 'Matrix file'
+        required: true
+        type: string
+      project-name:
+        description: "Project name"
+        required: true
+        type: string
+      client-name:
+        description: "Client name"
+        required: true
+        type: string
+      version:
+        description: "Build version"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+
+  upload-project:
+    runs-on: ubuntu-latest
+    # if: >-
+    #   ${{ !github.event.repository.is_template }}
+    strategy:
+      matrix: ${{ fromJSON(inputs.matrix-file) }}
+    outputs:
+      buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
+    name: Upload build for  ${{ matrix.platformName }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Print version
+        run: |
+          echo ${{ inputs.version }}
+        shell: bash
+      - name: ${{ matrix.platformName }} external file
+        uses: ./.github/script/upload-workflow
+        with:
+          platform: ${{ matrix.platformName }}
+          version: ${{ inputs.version }}
+          AWS_KEY: ${{ secrets.AWS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+          project-name: ${{ inputs.project-name }}  
+          client-name: ${{ inputs.client-name }}  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
