@@ -81,9 +81,10 @@ runs:
               },
               {
                   "title": "## Other",
-                  "labels": []
+                  "labels": [perf, refactor, test, revert]
               }
             ],
+            "ignore_labels": [chore, ignore],
             "label_extractor": [
               {
                 "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|release|BREAKING CHANGE)(\(.*\))?: .*$",
