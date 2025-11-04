@@ -34,7 +34,7 @@ jobs:
     outputs:
       name: ${{ steps.names.outputs.name }}
       client: ${{ steps.names.outputs.client }}
-      formatted-name: ${{ steps.names.outputs.formatted-name }}
+      formatted-name: ${{ steps.names.outputs.formatted-name }} 
   build-repo:
     name:  Build Repo
     needs: [check-license,get-matrix, get-names]
