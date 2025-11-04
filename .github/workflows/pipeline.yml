@@ -3,7 +3,9 @@ on:
   workflow_dispatch:
   push:
     branches:
+      - production
       - main
+      - develop
 
 permissions:
   contents: write
@@ -13,12 +15,12 @@ jobs:
     name: Check Unity License
     secrets: inherit
     uses: ./.github/workflows/check-license.yml
-  check-matrix:
-    name: Check Matrix File
+  get-matrix:
+    name: Get Matrix File
     needs: [check-license]
     if: needs.check-license.outputs.state != ''
     secrets: inherit
-    uses: ./.github/workflows/check-matrix.yml
+    uses: ./.github/workflows/get-matrix.yml
   get-names:
     name: Get project and client name
     runs-on: ubuntu-latest
@@ -35,12 +37,12 @@ jobs:
       formatted-name: ${{ steps.names.outputs.formatted-name }}
   build-repo:
     name:  Build Repo
-    needs: [check-license,check-matrix, get-names]
-    if: needs.check-license.outputs.state != '' && needs.check-matrix.outputs.state != ''
+    needs: [check-license,get-matrix, get-names]
+    if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/build-repo.yml
     with:
-      matrix-file: ${{needs.check-matrix.outputs.file}}
+      matrix-file: ${{needs.get-matrix.outputs.file}}
       formatted-name: ${{needs.get-names.outputs.formatted-name}} 
   get-version:
     name: Get Version
@@ -51,12 +53,12 @@ jobs:
       appply-version: true
   upload-repo:
     name:  Upload Repo
-    needs: [check-license,check-matrix, get-names, get-version, build-repo]
-    if: needs.check-license.outputs.state != '' && needs.check-matrix.outputs.state != ''
+    needs: [check-license,get-matrix, get-names, get-version, build-repo]
+    if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/upload-build.yml
     with:
-      matrix-file: ${{needs.check-matrix.outputs.file}}
+      matrix-file: ${{needs.get-matrix.outputs.file}}
       project-name: ${{needs.get-names.outputs.name}}
       client-name: ${{needs.get-names.outputs.client}}
       version: ${{needs.get-version.outputs.version}}

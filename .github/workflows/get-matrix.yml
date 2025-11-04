@@ -1,4 +1,4 @@
-name: Check Matrix File
+name: Get Matrix File
 
 on: 
   workflow_call:
@@ -12,7 +12,7 @@ on:
     
 jobs:
   matrix-file:
-    name: Check matrix file
+    name: Get matrix file
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
