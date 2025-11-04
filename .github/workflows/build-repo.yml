@@ -10,10 +10,6 @@ on:
         description: 'Project name formatted'
         required: true
         type: string
-    outputs:
-      version:
-        description: 'Version info'
-        value: ${{ jobs.build-project.outputs.buildVersion }}
 
 permissions:
   contents: write
@@ -24,8 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(inputs.matrix-file) }}
-    outputs:
-      buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     name: Build project for  ${{ matrix.platformName }}
     steps:
       - name: Checkout Repository

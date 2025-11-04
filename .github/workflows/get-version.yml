@@ -24,7 +24,7 @@ jobs:
         id: branch
         run: |
           branch=$(git rev-parse --abbrev-ref HEAD)
-          if [ $branch == "main" ]; then 
+          if [ $branch == "develop" ]; then 
           echo "namespace=d" >> $GITHUB_OUTPUT
           fi
         shell: bash

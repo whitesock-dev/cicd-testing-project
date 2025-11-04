@@ -35,7 +35,6 @@ jobs:
       formatted-name: ${{ steps.names.outputs.formatted-name }}
   get-version:
     name: Get Version
-    needs: [check-license,check-matrix]
     secrets: inherit
     uses: ./.github/workflows/get-version.yml
     with:
@@ -51,7 +50,7 @@ jobs:
       formatted-name: ${{needs.get-names.outputs.formatted-name}} 
   upload-repo:
     name:  Upload Repo
-    needs: [check-license,check-matrix, build-repo, get-names]
+    needs: [check-license,check-matrix, get-names, get-version, build-repo]
     if: needs.check-license.outputs.state != '' && needs.check-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/upload-build.yml
@@ -59,6 +58,6 @@ jobs:
       matrix-file: ${{needs.check-matrix.outputs.file}}
       project-name: ${{needs.get-names.outputs.name}}
       client-name: ${{needs.get-names.outputs.client}}
-      version: ${{needs.build-repo.outputs.version}}
+      version: ${{needs.get-version.outputs.version}}
       
   

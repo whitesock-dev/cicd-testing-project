@@ -42,10 +42,10 @@ jobs:
         uses: ./.github/script/upload-workflow
         with:
           platform: ${{ matrix.platformName }}
+          version: ${{ inputs.version }}
           AWS_KEY: ${{ secrets.AWS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
           project-name: ${{ inputs.project-name }}  
           client-name: ${{ inputs.client-name }}  
-          version: ${{ inputs.version }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

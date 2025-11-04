@@ -3,6 +3,9 @@ inputs:
   platform:
     required: true
     description: "Current platform"
+  version:
+    required: true
+    description: "Current version" 
   AWS_KEY:
     required: true
     description: "AWS KEY"
@@ -18,9 +21,6 @@ inputs:
   client-name:
     required: true
     description: "Client name"
-  version:
-    required: true
-    description: "Build version"
   GITHUB_TOKEN:
     required: true
     description: "Github token"
@@ -37,37 +37,18 @@ runs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Create version
-      id: semantic
-      uses: paulhatch/semantic-version@v5.0.2
-      with:
-        tag_prefix: "v"
-        bump_each_commit: true
-        major_pattern: "/BREAKING CHANGE:|release:/"
-        minor_pattern:  "/feat:/"
-        version_format: "${major}.${minor}.${patch}"
-    - name: Set Version Tag
-      id: version
-      run: |
-        git tag ${{steps.semantic.outputs.version_tag}} 
-        git push origin ${{steps.semantic.outputs.version_tag}}
-      shell: bash
-    - name: Print version
-      run: |
-        echo ${{steps.semantic.outputs.version_tag}}
-      shell: bash
     - name: Download Webgl Artifact
       uses: actions/download-artifact@v4
       with:
         name: build-${{ inputs.platform }}
-        path: build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}
+        path: build-${{ inputs.platform }}-${{inputs.version}}
     - name: Zip artifact
       run: |
-        zip -r build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}
+        zip -r build-${{ inputs.platform }}-${{inputs.version}}.zip build-${{ inputs.platform }}-${{inputs.version}}
       shell: bash
     - name: Upload Directory to S3
       run: |
-        aws s3 sync ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{steps.semantic.outputs.version_tag}}/
+        aws s3 sync ./build-${{ inputs.platform }}-${{inputs.version}}/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{inputs.version}}/
       env:
         AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
@@ -75,7 +56,7 @@ runs:
       shell: bash 
     - name: Upload Zip to S3
       run: |
-        aws s3 cp ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{steps.semantic.outputs.version_tag}}/build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
+        aws s3 cp ./build-${{ inputs.platform }}-${{inputs.version}}.zip s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{inputs.version}}/build-${{ inputs.platform }}-${{inputs.version}}.zip
       env:
         AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
@@ -118,8 +99,8 @@ runs:
       uses: softprops/action-gh-release@v2
       with:
         body: ${{steps.github_release.outputs.changelog}}
-        files: ./build-${{ inputs.platform }}-${{steps.semantic.outputs.version_tag}}.zip
-        tag_name: ${{steps.semantic.outputs.version_tag}}
-        name: ${{steps.semantic.outputs.version_tag}}
+        files: ./build-${{ inputs.platform }}-${{inputs.version}}.zip
+        tag_name: ${{inputs.version}}
+        name: ${{inputs.version}}
 
 
