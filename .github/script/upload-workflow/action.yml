@@ -74,17 +74,19 @@ runs:
               {
                   "title": "## Feature",
                   "labels": ["feat", "feature"]
+                  "exclude_labels": [chore, ignore]
               },
               {
                   "title": "## Fix",
                   "labels": ["fix", "bug"]
+                  "exclude_labels": [chore, ignore]
               },
               {
                   "title": "## Other",
-                  "labels": [perf, refactor, test, revert]
+                  "labels": [perf, refactor, test, revert],
+                  "exclude_labels": [chore, ignore]
               }
             ],
-            "ignore_labels": [chore, ignore],
             "label_extractor": [
               {
                 "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|release|BREAKING CHANGE)(\(.*\))?: .*$",
