@@ -28,8 +28,6 @@ jobs:
           echo "namespace=d" >> $GITHUB_OUTPUT
           elif [ $branch == "production" ]; then
           echo "namespace=f" >> $GITHUB_OUTPUT
-          elif [ $branch == "main" ]; then
-          echo "namespace=m" >> $GITHUB_OUTPUT
           fi
         shell: bash
       - name: Create version
