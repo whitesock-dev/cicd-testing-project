@@ -21,15 +21,6 @@ inputs:
   client-name:
     required: true
     description: "Client name"
-  GITHUB_TOKEN:
-    required: true
-    description: "Github token"
-
-# outputs:
-#   random:
-#     description: "Example output"
-#     value: ${{ steps.step1.outputs.random }}
-
 runs:
   using: "composite"
   steps:
@@ -37,15 +28,6 @@ runs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Download Webgl Artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: build-${{ inputs.platform }}
-        path: build-${{ inputs.platform }}-${{inputs.version}}
-    - name: Zip artifact
-      run: |
-        zip -r build-${{ inputs.platform }}-${{inputs.version}}.zip build-${{ inputs.platform }}-${{inputs.version}}
-      shell: bash
     - name: Upload Directory to S3
       run: |
         aws s3 sync ./build-${{ inputs.platform }}-${{inputs.version}}/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{inputs.version}}/
@@ -58,24 +40,7 @@ runs:
       run: |
         aws s3 cp ./build-${{ inputs.platform }}-${{inputs.version}}.zip s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{inputs.version}}/build-${{ inputs.platform }}-${{inputs.version}}.zip
       env:
-        AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}}
+        AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}} 
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }} 
         AWS_DEFAULT_REGION: 'eu-west-3'
       shell: bash
-    - name: Build Changelog 
-      id: github_release
-      uses: mikepenz/release-changelog-builder-action@v5
-      with:
-        mode: "COMMIT"
-        configuration: ".github/config/changelog-configuration.json"
-      env:
-        GITHUB_TOKEN: ${{inputs.GITHUB_TOKEN}}
-    - name: Create a release
-      uses: softprops/action-gh-release@v2
-      with:
-        body: ${{steps.github_release.outputs.changelog}}
-        files: ./build-${{ inputs.platform }}-${{inputs.version}}.zip
-        tag_name: ${{inputs.version}}
-        name: ${{inputs.version}}
-
-

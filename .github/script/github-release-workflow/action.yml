@@ -1,0 +1,35 @@
+name: Upload Workflow
+inputs:
+  platform:
+    required: true
+    description: "Current platform"
+  version:
+    required: true
+    description: "Current version" 
+  GITHUB_TOKEN:
+    required: true
+    description: "Github token"
+runs:
+  using: "composite"
+  steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Build Changelog 
+      id: github_release
+      uses: mikepenz/release-changelog-builder-action@v5
+      with:
+        mode: "COMMIT"
+        configuration: ".github/config/changelog-configuration.json"
+      env:
+        GITHUB_TOKEN: ${{inputs.GITHUB_TOKEN}}
+    - name: Create a release
+      uses: softprops/action-gh-release@v2
+      with:
+        body: ${{steps.github_release.outputs.changelog}}
+        files: ./build-${{ inputs.platform }}-${{inputs.version}}.zip
+        tag_name: ${{inputs.version}}
+        name: ${{inputs.version}}
+
+
