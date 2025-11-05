@@ -1,0 +1,42 @@
+name: Upload Workflow
+inputs:
+  platform:
+    required: true
+    description: "Current platform"
+  version:
+    required: true
+    description: "Current version" 
+  AWS_KEY:
+    required: true
+    description: "AWS KEY"
+  AWS_SECRET_KEY:
+    required: true
+    description: "AWS SECRET KEY"
+  AWS_BUCKET:
+    required: true
+    description: "AWS BUCKET NAME"
+  project-name:
+    required: true
+    description: "Project name"
+  client-name:
+    required: true
+    description: "Client name"
+runs:
+  using: "composite"
+  steps:
+    - name: Upload Directory to S3
+      run: |
+        aws s3 sync ./build-${{ inputs.platform }}-${{inputs.version}}/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{inputs.version}}/
+      env:
+        AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }}
+        AWS_DEFAULT_REGION: 'eu-west-3'
+      shell: bash 
+    - name: Upload Zip to S3 
+      run: |
+        aws s3 cp ./build-${{ inputs.platform }}-${{inputs.version}}.zip s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{inputs.version}}/build-${{ inputs.platform }}-${{inputs.version}}.zip
+      env:
+        AWS_ACCESS_KEY_ID: ${{inputs.AWS_KEY}} 
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_KEY }} 
+        AWS_DEFAULT_REGION: 'eu-west-3'
+      shell: bash
