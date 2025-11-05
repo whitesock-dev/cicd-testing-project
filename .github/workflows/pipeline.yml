@@ -51,8 +51,8 @@ jobs:
     uses: ./.github/workflows/get-version.yml
     with:
       appply-version: true
-  upload-repo:
-    name:  Upload Repo
+  upload-build:
+    name:  Upload build
     needs: [check-license,get-matrix, get-names, get-version, build-repo]
     if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
     secrets: inherit
