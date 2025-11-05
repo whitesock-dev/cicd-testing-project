@@ -24,10 +24,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Check out code
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
     - name: Upload Directory to S3
       run: |
         aws s3 sync ./build-${{ inputs.platform }}-${{inputs.version}}/ s3://${{inputs.AWS_BUCKET}}/${{inputs.client-name}}/${{ inputs.project-name }}/${{inputs.version}}/
