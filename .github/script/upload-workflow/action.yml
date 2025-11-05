@@ -90,7 +90,7 @@ runs:
             "ignore_labels": ["chore", "ignore"],
             "label_extractor": [
               {
-                "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|release|BREAKING CHANGE)(\(.*\))?: .*$",
+                "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|release|BREAKING CHANGE)(\\(.*\\))?: .*$",
                 "on_property": "title",
                 "method": "replace",
                 "target": "$1"
