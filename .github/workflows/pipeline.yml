@@ -22,7 +22,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/get-matrix.yml
   get-names:
-    name: Get project and client name
+    name: Get project and client name 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
