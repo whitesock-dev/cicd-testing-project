@@ -45,7 +45,7 @@ jobs:
       matrix-file: ${{needs.get-matrix.outputs.file}}
       formatted-name: ${{needs.get-names.outputs.formatted-name}} 
   get-version:
-    name: Get Version
+    name: Get Version 
     needs: [build-repo]
     secrets: inherit
     uses: ./.github/workflows/get-version.yml
