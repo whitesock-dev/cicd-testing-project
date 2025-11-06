@@ -40,7 +40,7 @@ jobs:
       - name: Print version
         run: |
           echo ${{steps.semantic.outputs.version_tag}}
-          echo ${{steps.semantic.outputs.version_tag}}::-2
+          echo ${${{steps.semantic.outputs.version_tag}}::-2}
         shell: bash
     outputs:
       version: ${{ steps.semantic.outputs.version_tag }}
