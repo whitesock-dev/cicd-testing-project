@@ -51,7 +51,7 @@ jobs:
       version: ${{needs.get-version.outputs.format-version}}
   apply-version:
     name: Apply Tag Version
-    needs: [build-repo]
+    needs: [build-repo, get-version]
     runs-on: ubuntu-latest
     steps:
       - name: Apply Git Tags

@@ -47,8 +47,8 @@ jobs:
           format=${{steps.semantic.outputs.version_tag}}
           format=${format::-2}
           echo ${format}
-          echo "formatted-name=${format}" >> $GITHUB_OUTPUT
+          echo "result=${format}" >> $GITHUB_OUTPUT
         shell: bash
     outputs:
       version: ${{ steps.semantic.outputs.version_tag }}
-      format-version: ${{ steps.format.outputs.format-version }}
+      format-version: ${{ steps.format.outputs.result }}
