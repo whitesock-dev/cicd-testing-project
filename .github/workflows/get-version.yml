@@ -1,11 +1,6 @@
 name: Get Version
 on: 
   workflow_call:
-    inputs:
-      appply-version:
-        description: 'Apply version tag'
-        required: true
-        type: boolean
     outputs:
       version:
         description: 'Repo version'
@@ -45,12 +40,7 @@ jobs:
       - name: Print version
         run: |
           echo ${{steps.semantic.outputs.version_tag}}
-        shell: bash
-      - name: Set Version Tag
-        if: ${{ inputs.appply-version }}
-        run: |
-          git tag ${{steps.semantic.outputs.version_tag}} 
-          git push origin ${{steps.semantic.outputs.version_tag}}
+          echo ${{steps.semantic.outputs.version_tag}}::-2
         shell: bash
     outputs:
       version: ${{ steps.semantic.outputs.version_tag }}

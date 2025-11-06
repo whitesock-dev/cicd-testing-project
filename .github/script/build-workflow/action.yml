@@ -12,6 +12,9 @@ inputs:
   formatted-name:
     required: true
     description: "Project formatted name"
+  version:
+    description: 'Project version'
+    required: true
   UNITY_EMAIL:
     required: true
     description: "Unity Mail"

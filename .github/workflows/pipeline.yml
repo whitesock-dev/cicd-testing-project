@@ -35,22 +35,30 @@ jobs:
       name: ${{ steps.names.outputs.name }}
       client: ${{ steps.names.outputs.client }}
       formatted-name: ${{ steps.names.outputs.formatted-name }}
+  get-version:
+    name: Get Version 
+    secrets: inherit
+    uses: ./.github/workflows/get-version.yml
   build-repo:
     name:  Build Repo
-    needs: [check-license,get-matrix, get-names]
+    needs: [check-license,get-matrix, get-names, get-version]
     if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/build-repo.yml
     with:
       matrix-file: ${{needs.get-matrix.outputs.file}}
       formatted-name: ${{needs.get-names.outputs.formatted-name}} 
-  get-version:
-    name: Get Version 
+      version: ${{needs.get-version.outputs.version}}
+  apply-version:
+    name: Apply Tag Version
     needs: [build-repo]
-    secrets: inherit
-    uses: ./.github/workflows/get-version.yml
-    with:
-      appply-version: true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply Git Tags
+        run: |
+          git tag ${{needs.get-version.outputs.version}} 
+          git push origin ${{needs.get-version.outputs.version}}
+        shell: bash
   upload-build:
     name:  Upload build
     needs: [check-license,get-matrix, get-names, get-version, build-repo]
