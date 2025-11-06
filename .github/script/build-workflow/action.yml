@@ -95,7 +95,8 @@ runs:
         projectPath: ./${{ inputs.formatted-name }}_Unity
         buildProfile: ${{ inputs.config-file }}
         buildsPath: build-${{ inputs.platform }}
-        versioning: ${{ inputs.version }}
+        versioning: Custom
+        version: ${{ inputs.version }}
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
