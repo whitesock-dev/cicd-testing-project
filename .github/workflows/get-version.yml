@@ -5,6 +5,9 @@ on:
       version:
         description: 'Repo version'
         value: ${{ jobs.get-version.outputs.version }} 
+      format-version:
+        description: 'Formatted Repo version'
+        value: ${{ jobs.get-version.outputs.format-version }}
     
 jobs:
   get-version:
@@ -38,9 +41,14 @@ jobs:
           version_format: "${major}.${minor}.${patch}"
           namespace: ${{steps.branch.outputs.namespace}} 
       - name: Print version
+        id: format
         run: |
           echo ${{steps.semantic.outputs.version_tag}}
-          echo ${${{steps.semantic.outputs.version_tag}}::-2}
+          format=${{steps.semantic.outputs.version_tag}}
+          format=${format::-2}
+          echo ${format}
+          echo "formatted-name=${format}" >> $GITHUB_OUTPUT
         shell: bash
     outputs:
       version: ${{ steps.semantic.outputs.version_tag }}
+      format-version: ${{ steps.format.outputs.format-version }}
