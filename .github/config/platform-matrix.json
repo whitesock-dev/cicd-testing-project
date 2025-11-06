@@ -1,1 +1,1 @@
-{"include":[{"platformName":"Android","targetPlatform":"Android","configFile":"Assets/Settings/BuildProfiles/AndroidBuild.asset"}]}
+{"include":[{"platformName":"Webgl","targetPlatform":"WebGL","configFile":"Assets/Settings/BuildProfiles/WebglBuild.asset"}]}
