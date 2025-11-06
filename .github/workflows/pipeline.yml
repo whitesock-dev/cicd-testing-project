@@ -48,7 +48,7 @@ jobs:
     with:
       matrix-file: ${{needs.get-matrix.outputs.file}}
       formatted-name: ${{needs.get-names.outputs.formatted-name}} 
-      version: ${{needs.get-version.outputs.version}}
+      version: ${{needs.get-version.outputs.format-version}}
   apply-version:
     name: Apply Tag Version
     needs: [build-repo]
