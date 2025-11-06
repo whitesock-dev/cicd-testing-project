@@ -61,7 +61,7 @@ jobs:
         shell: bash
   upload-build:
     name:  Upload build
-    needs: [check-license,get-matrix, get-names, get-version, build-repo]
+    needs: [check-license,get-matrix, get-names, get-version, build-repo, apply-version]
     if: needs.check-license.outputs.state != '' && needs.get-matrix.outputs.state != ''
     secrets: inherit
     uses: ./.github/workflows/upload-build.yml
