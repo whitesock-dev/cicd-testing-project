@@ -110,7 +110,7 @@ runs:
         buildProfile: ${{ inputs.config-file }}
         buildsPath: build-${{ inputs.platform }}
         versioning: Custom
-        version: ${{ inputs.version }}
+        version: ${{ inputs.version }} 
         androidKeystoreName: user.keystore
         androidKeystoreBase64: ${{ inputs.ANDROID_KEYSTORE_BASE64 }}
         androidKeystorePass: ${{ inputs.KEYSTORE_PASS }}
