@@ -30,13 +30,13 @@ inputs:
   ANDROID_KEYSTORE_BASE64:
     required: true
     description: "Android Keystore"
-  KEYSTORE_PASS:
+  ANDROID_KEYSTORE_PASS:
     required: true
     description: "Android Keystore Password"
-  KEY_ALIAS_NAME:
+  ANDROID_KEYALIAS_NAME:
     required: true
     description: "Key Alias"
-  KEY_ALIAS_PASS:
+  ANDROID_KEYALIAS_PASS:
     required: true
     description: "Key Alias Password"
   
@@ -113,9 +113,9 @@ runs:
         version: ${{ inputs.version }} 
         androidKeystoreName: user.keystore
         androidKeystoreBase64: ${{ inputs.ANDROID_KEYSTORE_BASE64 }}
-        androidKeystorePass: ${{ inputs.KEYSTORE_PASS }}
-        androidKeyaliasName: ${{ inputs.KEY_ALIAS_NAME }}
-        androidKeyaliasPass: ${{ inputs.KEY_ALIAS_PASS }}
+        androidKeystorePass: ${{ inputs.ANDROID_KEYSTORE_PASS }}
+        androidKeyaliasName: ${{ inputs.ANDROID_KEYALIAS_NAME }}
+        androidKeyaliasPass: ${{ inputs.ANDROID_KEYALIAS_PASS }}
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
