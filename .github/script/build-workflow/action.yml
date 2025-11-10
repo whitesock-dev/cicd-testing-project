@@ -111,6 +111,7 @@ runs:
         buildsPath: build-${{ inputs.platform }}
         versioning: Custom
         version: ${{ inputs.version }}
+        androidKeystoreName: user.keystore
         androidKeystoreBase64: ${{ inputs.ANDROID_KEYSTORE_BASE64 }}
         androidKeystorePass: ${{ inputs.KEYSTORE_PASS }}
         androidKeyaliasName: ${{ inputs.KEY_ALIAS_NAME }}
