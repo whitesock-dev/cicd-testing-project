@@ -27,6 +27,19 @@ inputs:
   GITHUB_TOKEN:
     required: true
     description: "Github Token"
+  ANDROID_KEYSTORE_BASE64:
+    required: true
+    description: "Android Keystore"
+  KEYSTORE_PASS:
+    required: true
+    description: "Android Keystore Password"
+  KEY_ALIAS_NAME:
+    required: true
+    description: "Key Alias"
+  KEY_ALIAS_PASS:
+    required: true
+    description: "Key Alias Password"
+  
   
 
 
@@ -98,6 +111,10 @@ runs:
         buildsPath: build-${{ inputs.platform }}
         versioning: Custom
         version: ${{ inputs.version }}
+        androidKeystoreBase64: ${{ inputs.ANDROID_KEYSTORE_BASE64 }}
+        androidKeystorePass: ${{ inputs.KEYSTORE_PASS }}
+        androidKeyaliasName: ${{ inputs.KEY_ALIAS_NAME }}
+        androidKeyaliasPass: ${{ inputs.KEY_ALIAS_PASS }}
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
