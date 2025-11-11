@@ -53,10 +53,10 @@ jobs:
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
           # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
-          targetPlatform: ${{ matrix.target-platform }}
+          targetPlatform: ${{ matrix.platformName }}
           androidExportType: androidAppBundle
           projectPath: ./${{ inputs.formatted-name }}_Unity
-          buildProfile: ${{ matrix.config-file }}
+          buildProfile: ${{ matrix.configFile }}
           buildsPath: build-${{ matrix.platformName }}
           versioning: Custom
           version: ${{ inputs.version }} 
