@@ -102,24 +102,20 @@ runs:
         UNITY_EMAIL: ${{ inputs.UNITY_EMAIL }}
         UNITY_PASSWORD: ${{ inputs.UNITY_PASSWORD }}
         UNITY_SERIAL: ${{ inputs.UNITY_SERIAL }}
-        ANDROID_KEYSTORE_BASE64: ${{ inputs.ANDROID_KEYSTORE_BASE64 }}
-        ANDROID_KEYSTORE_PASS: ${{ inputs.ANDROID_KEYSTORE_PASS }}
-        ANDROID_KEYALIAS_NAME: ${{ inputs.ANDROID_KEYALIAS_NAME }}
-        ANDROID_KEYALIAS_PASS: ${{ inputs.ANDROID_KEYALIAS_PASS }}
       with:
         # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
         targetPlatform: ${{ inputs.target-platform }}
-        androidExportType: 'androidAppBundle'
+        androidExportType: androidAppBundle
         projectPath: ./${{ inputs.formatted-name }}_Unity
         buildProfile: ${{ inputs.config-file }}
         buildsPath: build-${{ inputs.platform }}
         versioning: Custom
         version: ${{ inputs.version }} 
-        androidKeystoreName: user.keystore
-        androidKeystoreBase64: ${{ inputs.ANDROID_KEYSTORE_BASE64 }}
-        androidKeystorePass: ${{ inputs.ANDROID_KEYSTORE_PASS }}
-        androidKeyaliasName: ${{ inputs.ANDROID_KEYALIAS_NAME }}
-        androidKeyaliasPass: ${{ inputs.ANDROID_KEYALIAS_PASS }}
+        androidKeystoreName: user
+        androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+        androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+        androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
         androidTargetSdkVersion: AndroidApiLevel33
     - name: Upload build
       uses: actions/upload-artifact@v4
