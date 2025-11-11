@@ -26,16 +26,6 @@ jobs:
       matrix: ${{ fromJSON(inputs.matrix-file) }}
     name: Build project for  ${{ matrix.platformName }}
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
@@ -44,31 +34,19 @@ jobs:
         run: |
           echo ${{ inputs.version }}
         shell: bash
-      - name: Builder
-        id: build-step
-        uses: game-ci/unity-builder@v4
-        env:
+      - name: ${{ matrix.platformName }} external file
+        uses: ./.github/script/build-workflow
+        with:
+          platform: ${{ matrix.platformName }}
+          target-platform: ${{ matrix.targetPlatform }}
+          config-file: ${{ matrix.configFile }}
+          formatted-name: ${{ inputs.formatted-name }}
+          version: ${{ inputs.version }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
-        with:
-          # StandaloneWindows64, WebGL or check the table at the bottom of https://docs.unity3d.com/ScriptReference/BuildTarget.html
-          targetPlatform: ${{ matrix.platformName }}
-          androidExportType: androidAppBundle
-          projectPath: ./${{ inputs.formatted-name }}_Unity
-          buildsPath: build-${{ matrix.platformName }}
-          versioning: Custom
-          version: ${{ inputs.version }} 
-          androidKeystoreName: user
-          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
-          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
-          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
-          androidTargetSdkVersion: AndroidApiLevel33
-      - name: Upload build
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-${{ matrix.platformName }}
-          path: build-${{ matrix.platformName }}
-        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          ANDROID_KEYALIAS_NAME: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          ANDROID_KEYALIAS_PASS: ${{ secrets.ANDROID_KEYALIAS_PASS }}

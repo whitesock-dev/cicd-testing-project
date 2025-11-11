@@ -107,7 +107,7 @@ runs:
         targetPlatform: ${{ inputs.target-platform }}
         androidExportType: androidAppBundle
         projectPath: ./${{ inputs.formatted-name }}_Unity
-        buildProfile: ${{ inputs.config-file }}
+        # buildProfile: ${{ inputs.config-file }}
         buildsPath: build-${{ inputs.platform }}
         versioning: Custom
         version: ${{ inputs.version }} 
