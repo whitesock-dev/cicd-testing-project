@@ -112,10 +112,10 @@ runs:
         versioning: Custom
         version: ${{ inputs.version }} 
         androidKeystoreName: user
-        androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-        androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
-        androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
-        androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+        androidKeystoreBase64: ${{ inputs.ANDROID_KEYSTORE_BASE64 }}
+        androidKeystorePass: ${{ inputs.ANDROID_KEYSTORE_PASS }}
+        androidKeyaliasName: ${{ inputs.ANDROID_KEYALIAS_NAME }}
+        androidKeyaliasPass: ${{ inputs.ANDROID_KEYALIAS_PASS }}
         androidTargetSdkVersion: AndroidApiLevel33
     - name: Upload build
       uses: actions/upload-artifact@v4
