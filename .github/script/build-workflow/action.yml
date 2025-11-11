@@ -120,6 +120,7 @@ runs:
         androidKeystorePass: ${{ inputs.ANDROID_KEYSTORE_PASS }}
         androidKeyaliasName: ${{ inputs.ANDROID_KEYALIAS_NAME }}
         androidKeyaliasPass: ${{ inputs.ANDROID_KEYALIAS_PASS }}
+        androidTargetSdkVersion: AndroidApiLevel33
     - name: Upload build
       uses: actions/upload-artifact@v4
       with:
